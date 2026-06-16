@@ -290,8 +290,9 @@ body {
 */
 
 .portfolio {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.6);
   padding: 80px 40px;
+  text-align: center;
 }
 
 .portfolio-inner {
@@ -300,6 +301,10 @@ body {
 }
 
 .section-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #5a3a28;
   text-align: center;
   margin-bottom: 40px;
 }
