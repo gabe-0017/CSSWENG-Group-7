@@ -262,33 +262,6 @@ body {
 }
 
 /* ── PORTFOLIO ── */
-/*
-.portfolio {
-  background: rgba(255, 255, 255, 0.6);
-  padding: 64px 40px;
-  text-align: center;
-}
-
-.portfolio-inner {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.section-heading {
-  font-family: 'Playfair Display', serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #5a3a28;
-  margin-bottom: 16px;
-}
-
-.portfolio-placeholder {
-  font-size: 0.95rem;
-  color: #9a7060;
-  font-style: italic;
-}
-*/
-
 .portfolio {
   background: rgba(255, 255, 255, 0.6);
   padding: 80px 40px;
@@ -335,6 +308,7 @@ body {
 }
 
 .portfolio-label {
+  font-family: 'Playfair Display', serif;
   position: absolute;
   top: 0;
   left: 0;
@@ -352,6 +326,7 @@ body {
   font-size: 1rem;
   font-weight: 700;
   text-align: left;
+  -webkit-text-stroke: 1px #5a3a28;
 }
 
 /* ── CONTACT ── */
