@@ -385,6 +385,10 @@ body {
   letter-spacing: 0.01em;
 }
 
+.contact-text a {
+  text-decoration: none;
+}
+
 .contact-link {
   text-decoration: underline;
   text-underline-offset: 3px;
