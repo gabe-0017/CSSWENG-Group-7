@@ -306,14 +306,17 @@ body {
   font-family: 'Playfair Display', serif;
   position: absolute;
   bottom: 0;
+  left: 0;
   right: 0;
+  padding: 40px 18px 14px;
 
   padding: 14px 18px;
 
   background: linear-gradient(
     to top,
-    rgba(0,0,0,0.55),
-    rgba(0,0,0,0)
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0) 100%
   );
 
   color: white;
