@@ -305,24 +305,23 @@ body {
 .portfolio-label {
   font-family: 'Playfair Display', serif;
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  bottom: 0;
+  right: 0;
 
   padding: 14px 18px;
 
   background: linear-gradient(
-    to bottom,
+    to top,
     rgba(0,0,0,0.55),
     rgba(0,0,0,0)
   );
 
   color: white;
   font-size: 1.25rem; 
-  -webkit-text-stroke: 5px #5a3a28;
+  -webkit-text-stroke: 3px #5a3a28;
   paint-order: stroke fill;
   font-weight: 700;
-  text-align: left;
+  text-align: right;
 }
 
 /* ── CONTACT ── */
