@@ -319,7 +319,7 @@ body {
 
   color: white;
   font-size: 1.25rem; 
-  -webkit-text-stroke: 3px #5a3a28;
+  -webkit-text-stroke: 5px #5a3a28;
   paint-order: stroke fill;
   font-weight: 700;
   text-align: left;
