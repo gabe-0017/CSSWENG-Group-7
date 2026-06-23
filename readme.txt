@@ -1,0 +1,1 @@
+To run app, cd to backend and run command "npm run dev"
