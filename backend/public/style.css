@@ -20,7 +20,8 @@ body {
 /* Shared gradient used across hero, packages, contact sections */
 .hero,
 .packages,
-.contact {
+.contact,
+.login {
   background: linear-gradient(
     135deg,
     #f9b8d0 0%,
@@ -389,6 +390,21 @@ body {
 .contact-link:hover {
   color: #c06080;
   text-decoration-color: #c06080;
+}
+
+/* FOR LOGIN */
+.login {
+  min-height: calc(90vh - 57px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 80px 40px;
+}
+
+.field {
+  padding: 10.5 rem;
+
 }
 
 /* ── RESPONSIVE ── */
