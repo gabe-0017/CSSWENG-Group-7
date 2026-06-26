@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Caterer & Co Admin Login</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-main">The Caterer & Co</span>
+      <span class="brand-sub">by Amosco Event Catering Services</span>
+    </div>
+    <ul class="nav-links">
+      <!--
+      <li><a href="#packages">View Packages</a></li>
+      <li><a href="#portfolio">View Portfolio</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+      -->
+    <a href="/">Back to Main Page</a>
+    </ul>
+  </nav>
+
+  <!-- ── LOGIN ── -->
+  <section class="login" id="login">
+    <div class="hero-content">
+      <h1 class="hero-title">Admin Login</h1>
+      <p class="hero-byline">The Caterer & Co by Amosco Event Catering Services</p>
+      <div class="login-actions">
+        <!--<form  method="POST" action="/login"><-->
+          <label for="user">Admin Username</label>
+          <input class="field user-field" id="user" type="text" name="user" placeholder="Username" required>
+          <label for="password">Password</label>
+          <input class="field password-field" id="password" type="password" name="password" placeholder="Password" required>
+          <!--<span class="remember">
+            <input class="remember-me" type="checkbox" name="remMe"> 
+            <label for="remMe">Remember me</label>
+          </span>-->
+
+          <button class="btn btn-primary" type="submit">Log in</button>
+        <!--</form>-->
+      </div>
+    </div>
+  </section>
+   <script src="login.js"></script>
+</body>
+</html>
