@@ -20,7 +20,8 @@ body {
 /* Shared gradient used across hero, packages, contact sections */
 .hero,
 .packages,
-.contact {
+.contact,
+.login {
   background: linear-gradient(
     135deg,
     #f9b8d0 0%,
