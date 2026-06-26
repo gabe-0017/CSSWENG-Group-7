@@ -15,6 +15,17 @@ router.get("/", async (req, res) => {
     }
 });
 
+// login
+
+router.get("/adminlogin", async (req, res) => {
+  try{
+    res.render("login");
+  }
+  catch (error) {
+    console.error('Error fetching login page', error);
+  }
+});
+
 // =========================
 // BOOK EVENT
 // =========================
