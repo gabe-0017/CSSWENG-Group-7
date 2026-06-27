@@ -788,3 +788,28 @@ textarea {
     border:1px solid #f3e7e9;
 
 }
+
+/* ==========================
+   CALENDAR DATE COLORS
+========================== */
+
+.fc .booked-date {
+    background-color: #ffb3b3 !important;
+    opacity: 1 !important;
+}
+
+.fc .notice-date {
+    background-color: #fff0a0 !important;
+    opacity: 1 !important;
+}
+
+.fc-daygrid-day.selected-date {
+    outline: 3px solid #6dcfc4;
+    outline-offset: -3px;
+    border-radius: 4px;
+}
+
+.fc .fc-daygrid-day:has(.booked-date),
+.fc .fc-daygrid-day:has(.notice-date) {
+    cursor: not-allowed;
+}
