@@ -704,3 +704,87 @@ textarea {
     }
 
 }
+
+/* ==========================
+   FULLCALENDAR CUSTOM
+========================== */
+
+.fc {
+
+    font-family: "Lato", sans-serif;
+
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-theme-standard .fc-scrollgrid {
+
+    border-color: #f0e6e8;
+
+}
+
+.fc .fc-toolbar-title{
+
+    font-family:"Playfair Display", serif;
+
+    color:#b8878d;
+
+    font-size:32px;
+
+}
+
+.fc .fc-button{
+
+    background:#d8a2a9 !important;
+
+    border:none !important;
+
+    border-radius:10px !important;
+
+    box-shadow:none !important;
+
+}
+
+.fc .fc-button:hover{
+
+    background:#c88d96 !important;
+
+}
+
+.fc-daygrid-day:hover{
+
+    background:#fff7f8;
+
+    cursor:pointer;
+
+}
+
+.fc-day-today{
+
+    background:#fff0f2 !important;
+
+}
+
+.fc-event{
+
+    border:none;
+
+}
+
+.fc-bg-event{
+
+    opacity:.4;
+
+}
+
+#calendar{
+
+    margin-top:20px;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    border:1px solid #f3e7e9;
+
+}
