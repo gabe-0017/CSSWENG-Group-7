@@ -210,13 +210,13 @@
 
         <div class="form-group">
 
-          <label>Preferred Package</label>
+          <label>Design Motif</label>
 
-          <select name="package">
-            <option value="">Choose Package</option>
-            <option value="Wedding Package">Wedding Package</option>
-            <option value="Birthday Package">Birthday Package</option>
-          </select>
+          <input
+            type="text"
+            name="design_motif"
+            placeholder="ex: Rustic Boho, Tropical, Botanical, Vintage"
+            required>
 
         </div>
 
@@ -277,12 +277,13 @@
 
         <div class="form-group">
 
-          <label>Design Motif</label>
+          <label>Package (Optional)</label> <!-- Static for now, make dynamic once package manager is implemented -->
 
-          <input
-            type="text"
-            name="design_motif"
-            placeholder="ex: Rustic Boho, Tropical, Botanical, Vintage">
+          <select name="package">
+            <option value="">Choose Package</option>
+            <option value="Wedding Package">Wedding Package</option>
+            <option value="Birthday Package">Birthday Package</option>
+          </select>
 
         </div>
 
