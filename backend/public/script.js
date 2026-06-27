@@ -67,10 +67,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             const clicked = new Date(info.dateStr);
             clicked.setHours(0,0,0,0);
 
-            // Prevent past dates
-            if(clicked < today){
+            // Earliest booking = today + 3 days
+            const minimumBookingDate = new Date(today);
+            minimumBookingDate.setDate(today.getDate() + 3);
 
-                alert("You cannot book a past date.");
+            // Block dates before the minimum booking date
+            if(clicked < minimumBookingDate){
+
+                alert("Bookings must be made at least 3 days in advance.");
 
                 return;
 
@@ -85,31 +89,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             }
 
-            // 3-day notice
-            const difference = Math.ceil(
-                (clicked - today) /
-                (1000 * 60 * 60 * 24)
-            );
-
-            if(difference < 3){
-
-                const proceed = confirm(
-                    "Bookings should normally be made at least 3 days before the event.\n\nWould you like to continue and request an exception?"
-                );
-
-                if(!proceed){
-
-                    return;
-
-                }
-
-            }
-
             // Save selected date
             document.getElementById("event_date").value = info.dateStr;
 
             document.getElementById("selectedDateText").innerHTML =
-                "📅 Selected Date: <strong>" + info.dateStr + "</strong>";
+                "Selected Date: <strong>" + info.dateStr + "</strong>";
 
         },
 
@@ -122,6 +106,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             color: "#ff9b9b"
 
         }))
+
+    
 
     });
 
