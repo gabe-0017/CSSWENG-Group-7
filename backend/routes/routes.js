@@ -86,17 +86,16 @@ router.post("/book", async (req, res) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // Minimum allowed booking date = today + 4 days
+        // Earliest booking = today + 3 days
         const minAllowedDate = new Date(today);
-        minAllowedDate.setDate(minAllowedDate.getDate() + 4);
+        minAllowedDate.setDate(today.getDate() + 3);
 
         const selectedDate = new Date(event_date);
         selectedDate.setHours(0, 0, 0, 0);
 
-        // BLOCK if within next 3 days (or earlier)
         if (selectedDate < minAllowedDate) {
             return res.status(400).send(
-                "Bookings are only allowed starting 4 days from today. Please select a later date."
+                "Bookings must be made at least 3 days in advance."
             );
         }
 
