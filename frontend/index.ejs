@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/main.min.css" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Caterer & Co</title>
@@ -28,8 +29,46 @@
       <h1 class="hero-title">The Caterer & Co</h1>
       <p class="hero-byline">by Amosco Event Catering Services</p>
       <div class="hero-actions">
-        <a href="#contact" class="btn btn-primary">Get a Quote</a>
-        <a href="#packages" class="btn btn-secondary">View Packages</a>
+        <a href="#booking-page" class="btn btn-primary">Book Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PORTFOLIO ── -->
+  <section class="portfolio" id="portfolio">
+    <div class="portfolio-inner">
+      <h2 class="section-heading">View Portfolio</h2>
+  
+      <div class="portfolio-grid">
+  
+        <div class="portfolio-item">
+          <img src="images/489955354_1100202765461115_2396312437974451255_n.jpg" alt="Party Tray">
+            <div class="portfolio-label">
+            Party Trays
+          </div>
+        </div>
+  
+        <div class="portfolio-item">
+          <img src="images/489827343_1100973872050671_2596197340560491257_n.jpg" alt="Meal box">
+          <div class="portfolio-label">
+            Meal boxes
+          </div>
+        </div>
+  
+        <div class="portfolio-item">
+          <img src="images/491385366_1105336538281071_5570610922383578474_n.jpg" alt="Grazing Table">
+          <div class="portfolio-label">
+            Grazing Tables
+          </div>
+        </div>
+  
+        <div class="portfolio-item">
+          <img src="images/489821395_1100472665434125_4050857798346935465_n.jpg" alt="Event">
+          <div class="portfolio-label">
+            Events
+          </div>
+        </div>
+  
       </div>
     </div>
   </section>
@@ -106,44 +145,160 @@
     </div>
   </section>
 
-  <!-- ── PORTFOLIO ── -->
-  <section class="portfolio" id="portfolio">
-    <div class="portfolio-inner">
-      <h2 class="section-heading">View Portfolio</h2>
-  
-      <div class="portfolio-grid">
-  
-        <div class="portfolio-item">
-          <img src="images/489955354_1100202765461115_2396312437974451255_n.jpg" alt="Party Tray">
-            <div class="portfolio-label">
-            Party Trays
-          </div>
-        </div>
-  
-        <div class="portfolio-item">
-          <img src="images/489827343_1100973872050671_2596197340560491257_n.jpg" alt="Meal box">
-          <div class="portfolio-label">
-            Meal boxes
-          </div>
-        </div>
-  
-        <div class="portfolio-item">
-          <img src="images/491385366_1105336538281071_5570610922383578474_n.jpg" alt="Grazing Table">
-          <div class="portfolio-label">
-            Grazing Tables
-          </div>
-        </div>
-  
-        <div class="portfolio-item">
-          <img src="images/489821395_1100472665434125_4050857798346935465_n.jpg" alt="Event">
-          <div class="portfolio-label">
-            Events
-          </div>
-        </div>
-  
+
+   <!-- ── BOOKING ── -->
+<div class="booking-page" id="booking-page">
+
+  <div class="booking-container">
+
+    <h2>Book Your Event</h2>
+
+    <p class="booking-subtitle">
+      Tell us your event details and we'll create something memorable.
+    </p>
+
+    <form id="bookingForm" action="/book" method="POST">
+
+      <!-- Personal Information -->
+      <div class="section-title">
+        Personal Information
       </div>
-    </div>
-  </section>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" name="first_name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" name="last_name" required>
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label>Contact Number</label>
+          <input type="tel" name="contact_number" required>
+        </div>
+
+      </div>
+
+      <!-- Event Details -->
+      <div class="section-title">
+        Event Details
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>Event Type</label>
+          <input
+            type="text"
+            name="event_type"
+            placeholder="ex: Wedding, Birthday, Debut, etc."
+            required>
+        </div>
+
+        <div class="form-group">
+
+          <label>Design Motif</label>
+
+          <input
+            type="text"
+            name="design_motif"
+            placeholder="ex: Rustic Boho, Tropical, Botanical, Vintage"
+            required>
+
+        </div>
+
+      </div>
+
+      <!-- Calendar -->
+      <div class="form-group">
+
+        <label>Choose Your Event Date</label>
+
+        <p class="calendar-note">
+          🟢 Available &nbsp;&nbsp;
+          🔴 Already Booked &nbsp;&nbsp;
+          🟡 Less than 3 days notice
+        </p>
+
+        <div id="calendar"></div>
+
+        <!-- Hidden field submitted to backend -->
+        <input
+          type="hidden"
+          id="event_date"
+          name="event_date"
+          required>
+
+        <small id="selectedDateText">
+          No date selected.
+        </small>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Venue Location</label>
+
+        <textarea
+          rows="4"
+          name="venue_location"
+          placeholder="Complete venue address"
+          required></textarea>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>Number of Guests</label>
+
+          <input
+            type="number"
+            name="number_of_guest"
+            placeholder="ex: 100"
+            min="1"
+            required>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Package (Optional)</label> <!-- Static for now, make dynamic once package manager is implemented -->
+
+          <select name="package">
+            <option value="">Choose Package</option>
+            <option value="Wedding Package">Wedding Package</option>
+            <option value="Birthday Package">Birthday Package</option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <button class="book-btn" type="submit">
+        Book Event
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
 
   <!-- ── CONTACT ── -->
   <section class="contact" id="contact">
@@ -180,6 +335,11 @@
       </ul>
     </div>
   </section>
+
+<script src="script.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+<script src="/script.js"></script>
 
 </body>
 </html>

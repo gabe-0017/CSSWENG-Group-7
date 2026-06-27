@@ -433,3 +433,383 @@ body {
     padding: 60px 24px 80px;
   }
 }
+
+/* BOOKING MODAL */
+
+/* ==========================
+   BOOKING PAGE
+========================== */
+
+.booking-page {
+
+    min-height: 100vh;
+
+    background: #f8f3f4;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 50px 20px;
+
+}
+
+
+/* ==========================
+   BOOKING CARD
+========================== */
+
+.booking-container {
+
+    width: 100%;
+
+    max-width: 900px;
+
+    background: white;
+
+    border-radius: 25px;
+
+    padding: 50px;
+
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+
+}
+
+
+/* ==========================
+   HEADER
+========================== */
+
+.booking-container h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 42px;
+
+    color: #b8878d;
+
+    text-align: center;
+
+    margin-bottom: 10px;
+
+}
+
+
+.booking-subtitle {
+
+    text-align: center;
+
+    color: #777;
+
+    margin-bottom: 40px;
+
+    font-size: 16px;
+
+}
+
+
+/* ==========================
+   SECTION TITLES
+========================== */
+
+.section-title {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 24px;
+
+    color: #b8878d;
+
+    border-bottom: 1px solid #f0dfe1;
+
+    padding-bottom: 10px;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* ==========================
+   FORM LAYOUT
+========================== */
+
+.form-row {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+}
+
+
+.form-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    margin-bottom: 22px;
+
+}
+
+
+.form-group label {
+
+    margin-bottom: 8px;
+
+    color: #666;
+
+    font-weight: 600;
+
+    font-size: 15px;
+
+}
+
+
+/* ==========================
+   INPUTS
+========================== */
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 15px 18px;
+
+    border-radius: 12px;
+
+    border: 1px solid #ddd;
+
+    background: white;
+
+    font-size: 15px;
+
+    font-family: "Lato", sans-serif;
+
+    transition: 0.3s ease;
+
+}
+
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+
+    color: #aaa;
+
+}
+
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+
+    outline: none;
+
+    border-color: #d8a2a9;
+
+    box-shadow: 0 0 0 4px rgba(216,162,169,0.2);
+
+}
+
+
+/* ==========================
+   TEXTAREA
+========================== */
+
+textarea {
+
+    resize: vertical;
+
+}
+
+
+/* ==========================
+   BUTTON
+========================== */
+
+.book-btn {
+
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 18px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #d8a2a9,
+        #c88d96
+    );
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s ease;
+
+}
+
+
+.book-btn:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 10px 25px rgba(200,141,150,0.35);
+
+}
+
+
+/* ==========================
+   MOBILE VIEW
+========================== */
+
+@media (max-width: 768px) {
+
+    .booking-container {
+
+        padding: 30px;
+
+    }
+
+
+    .form-row {
+
+        grid-template-columns: 1fr;
+
+        gap: 0;
+
+    }
+
+
+    .booking-container h2 {
+
+        font-size: 32px;
+
+    }
+
+}
+
+/* ==========================
+   FULLCALENDAR CUSTOM
+========================== */
+
+.fc {
+
+    font-family: "Lato", sans-serif;
+
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-theme-standard .fc-scrollgrid {
+
+    border-color: #f0e6e8;
+
+}
+
+.fc .fc-toolbar-title{
+
+    font-family:"Playfair Display", serif;
+
+    color:#b8878d;
+
+    font-size:32px;
+
+}
+
+.fc .fc-button{
+
+    background:#d8a2a9 !important;
+
+    border:none !important;
+
+    border-radius:10px !important;
+
+    box-shadow:none !important;
+
+}
+
+.fc .fc-button:hover{
+
+    background:#c88d96 !important;
+
+}
+
+.fc-daygrid-day:hover{
+
+    background:#fff7f8;
+
+    cursor:pointer;
+
+}
+
+.fc-day-today{
+
+    background:#fff0f2 !important;
+
+}
+
+.fc-event{
+
+    border:none;
+
+}
+
+.fc-bg-event{
+
+    opacity:.4;
+
+}
+
+#calendar{
+
+    margin-top:20px;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    border:1px solid #f3e7e9;
+
+}
+
+/* ==========================
+   CALENDAR DATE COLORS
+========================== */
+
+.fc .booked-date {
+    background-color: #ffb3b3 !important;
+    opacity: 1 !important;
+}
+
+.fc .notice-date {
+    background-color: #fff0a0 !important;
+    opacity: 1 !important;
+}
+
+.fc-daygrid-day.selected-date {
+    outline: 3px solid #6dcfc4;
+    outline-offset: -3px;
+    border-radius: 4px;
+}
+
+.fc .fc-daygrid-day:has(.booked-date),
+.fc .fc-daygrid-day:has(.notice-date) {
+    cursor: not-allowed;
+}
