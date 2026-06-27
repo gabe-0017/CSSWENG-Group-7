@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/main.min.css" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Caterer & Co</title>
@@ -144,176 +145,160 @@
     </div>
   </section>
 
-      <!-- ── BOOKING ── -->
-    <div class="booking-page" id="booking-page">
 
-      <div class="booking-container">
+   <!-- ── BOOKING ── -->
+<div class="booking-page" id="booking-page">
 
-          <h2>Book Your Event</h2>
+  <div class="booking-container">
 
-          <p class="booking-subtitle">
-              Tell us your event details and we'll create something memorable.
-          </p>
+    <h2>Book Your Event</h2>
 
+    <p class="booking-subtitle">
+      Tell us your event details and we'll create something memorable.
+    </p>
 
-          <form id="bookingForm" action="/book" method="POST">
+    <form id="bookingForm" action="/book" method="POST">
 
-              <!-- Personal Information -->
-              <div class="section-title">
-                  Personal Information
-              </div>
+      <!-- Personal Information -->
+      <div class="section-title">
+        Personal Information
+      </div>
 
+      <div class="form-row">
 
-              <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" name="first_name" required>
+        </div>
 
-                  <div class="form-group">
-                      <label>First Name</label>
-                      <input 
-                          type="text"
-                          name="first_name"
-                          required>
-                  </div>
-
-
-                  <div class="form-group">
-                      <label>Last Name</label>
-                      <input 
-                          type="text"
-                          name="last_name"
-                          required>
-                  </div>
-
-              </div>
-
-
-              <div class="form-row">
-
-                  <div class="form-group">
-                      <label>Email Address</label>
-                      <input 
-                          type="email"
-                          name="email"
-                          required>
-                  </div>
-
-
-                  <div class="form-group">
-                      <label>Contact Number</label>
-                      <input 
-                          type="tel"
-                          name="contact_number"
-                          required>
-                  </div>
-
-              </div>
-
-
-              <!-- Event Details -->
-              <div class="section-title">
-                  Event Details
-              </div>
-
-
-              <div class="form-row">
-
-                  <div class="form-group">
-                      <label>Event Type</label>
-                      <input 
-                          type="text"
-                          name="event_type"
-                          placeholder="ex: Wedding, Birthday, Debut, etc."
-                          required>
-                  </div>
-
-
-                  <div class="form-group">
-                      <label>Event Date</label>
-                      <input 
-                          type="date"
-                          name="event_date"
-                          required>
-                  </div>
-
-              </div>
-
-
-              <div class="form-group">
-
-                  <label>Venue Location</label>
-
-                  <textarea 
-                      rows="4"
-                      name="venue_location"
-                      placeholder="Complete venue address"
-                      required></textarea>
-
-              </div>
-
-
-              <div class="form-row">
-
-                  <div class="form-group">
-
-                      <label>Number of Guests</label>
-
-                      <input 
-                          type="number"
-                          name="number_of_guest"
-                          placeholder="ex: 100"
-                          min="1"
-                          required>
-
-                  </div>
-
-
-                  <div class="form-group">
-
-                      <label>Design Motif</label>
-
-                      <input 
-                          type="text"
-                          name="design_motif"
-                          placeholder="ex: Rustic Boho, Tropical, Botanical, Vintage, etc.">
-
-                  </div>
-
-              </div>
-
-
-              <div class="form-group">
-
-                  <label>Package (Optional)</label> <!-- Make it dynamic in the future, for now just hardcode the options -->
-
-                  <select name="package">
-
-                      <option value="">
-                          Choose Package
-                      </option>
-
-                      <option value="Wedding Package">
-                          Wedding Package
-                      </option>
-
-                      <option value="Birthday Package">
-                          Birthday Package
-                      </option>
-
-                  </select>
-
-              </div>
-
-
-              <button class="book-btn" type="submit">
-                  Book Event
-              </button>
-
-
-          </form>
-
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" name="last_name" required>
+        </div>
 
       </div>
 
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label>Contact Number</label>
+          <input type="tel" name="contact_number" required>
+        </div>
+
+      </div>
+
+      <!-- Event Details -->
+      <div class="section-title">
+        Event Details
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>Event Type</label>
+          <input
+            type="text"
+            name="event_type"
+            placeholder="ex: Wedding, Birthday, Debut, etc."
+            required>
+        </div>
+
+        <div class="form-group">
+
+          <label>Preferred Package</label>
+
+          <select name="package">
+            <option value="">Choose Package</option>
+            <option value="Wedding Package">Wedding Package</option>
+            <option value="Birthday Package">Birthday Package</option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <!-- Calendar -->
+      <div class="form-group">
+
+        <label>Choose Your Event Date</label>
+
+        <p class="calendar-note">
+          🟢 Available &nbsp;&nbsp;
+          🔴 Already Booked &nbsp;&nbsp;
+          🟡 Less than 3 days notice
+        </p>
+
+        <div id="calendar"></div>
+
+        <!-- Hidden field submitted to backend -->
+        <input
+          type="hidden"
+          id="event_date"
+          name="event_date"
+          required>
+
+        <small id="selectedDateText">
+          No date selected.
+        </small>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Venue Location</label>
+
+        <textarea
+          rows="4"
+          name="venue_location"
+          placeholder="Complete venue address"
+          required></textarea>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>Number of Guests</label>
+
+          <input
+            type="number"
+            name="number_of_guest"
+            placeholder="ex: 100"
+            min="1"
+            required>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Design Motif</label>
+
+          <input
+            type="text"
+            name="design_motif"
+            placeholder="ex: Rustic Boho, Tropical, Botanical, Vintage">
+
+        </div>
+
+      </div>
+
+      <button class="book-btn" type="submit">
+        Book Event
+      </button>
+
+    </form>
+
   </div>
+
+</div>
+
+
   <!-- ── CONTACT ── -->
   <section class="contact" id="contact">
     <div class="contact-inner">
@@ -351,6 +336,9 @@
   </section>
 
 <script src="script.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+<script src="/script.js"></script>
 
 </body>
 </html>
