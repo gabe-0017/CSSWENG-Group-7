@@ -20,7 +20,8 @@ body {
 /* Shared gradient used across hero, packages, contact sections */
 .hero,
 .packages,
-.contact {
+.contact,
+.login {
   background: linear-gradient(
     135deg,
     #f9b8d0 0%,
@@ -432,6 +433,46 @@ body {
   .contact {
     padding: 60px 24px 80px;
   }
+}
+
+/* FOR LOGIN */
+
+.login {
+  min-height: calc(90vh - 57px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 80px 40px;
+}
+
+.login h1{
+   font-size: 2.4rem;
+}
+
+.login-actions {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.login-actions input {
+  font-size: .8rem;
+  width: 12rem;
+  height: 2rem;
+  border-radius: 6px;
+  text-decoration: none;
+  margin: .3rem;
+  padding: .5rem;
+  border: none;
+  box-shadow: 10px slategray;
+}
+
+.field {
+  padding: 10.5 rem;
+
 }
 
 /* BOOKING MODAL */

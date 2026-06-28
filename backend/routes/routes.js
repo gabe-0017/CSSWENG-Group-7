@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const supabase = require("../supabaseclient");
+const bcrypt = require("bcrypt");
 
 // =========================
 // HOME PAGE
@@ -138,5 +139,110 @@ router.post("/book", async (req, res) => {
         res.status(500).send(err.message);
     }
 });
+
+//register page
+
+router.get("/register-page", async (req, res) => {
+  try{
+    res.render("register");
+  }
+  catch (error) {
+    console.error('Error fetching login page', error);
+  }
+});
+
+// register
+router.post("/register", async (req, res) => {
+
+    const { user, password } = req.body;
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const { data, error } = await supabase
+        .from("admin_accounts")
+        .insert([
+            {
+                username: user,
+                password: hashedPassword
+            }
+        ]);
+
+    if (error) {
+        return res.send(error.message);
+    }
+
+    console.log(data);
+    res.redirect("/adminlogin");
+    res.send("Account Registered Successfully!");
+});
+
+
+//render login page
+
+router.get("/adminlogin", async (req, res) => {
+  try{
+    res.render("login");
+  }
+  catch (error) {
+    console.error('Error fetching login page', error);
+  }
+});
+
+// =========================
+// LOGIN
+// =========================
+
+
+router.post("/login", async (req, res) => {
+
+    console.log("logging in");
+    console.log(req.body);
+    const { logUser, logPassword } = req.body;
+    console.log(logUser, logPassword);
+    try {
+
+        const { data, error } = await supabase
+            .from("admin_accounts")
+            .select("*")
+            .eq("username", logUser.trim())
+            .single();
+
+        console.log(data);
+        console.log(error);
+        const samePassword = await bcrypt.compare(logPassword, data.password);
+
+        if (!samePassword) {
+        return res.render("login", {
+            error: "Invalid username or password"
+        });
+    }
+
+        if (error) {
+
+            console.error("========== SUPABASE ERROR ==========");
+            console.error(error);
+            console.error("====================================");
+
+            return res.status(500).send(error.message);
+        }
+
+        console.log("========== LOGGED IN ==========");
+        console.log(data);
+        console.log("===================================");
+
+        res.redirect("/");
+
+    } catch (err) {
+
+        console.error("========== SERVER ERROR ==========");
+        console.error(err);
+        console.error("==================================");
+
+        res.status(500).send(err.message);
+    }
+
+});
+
 
 module.exports = router;

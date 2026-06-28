@@ -159,3 +159,27 @@ document.addEventListener("DOMContentLoaded", async function () {
     calendar.render();
 
 });
+
+// register
+
+const regForm = document.getElementById("register-form");
+
+regForm.addEventListener("submit", function(e){
+
+    const user = document.getElementById("user").value;
+    const password = document.getElementById("password").value;
+
+
+});
+
+// login
+
+const loginForm = document.getElementById("login-form");
+
+regForm.addEventListener("submit", function(e){
+
+    const logUser = document.getElementById("logUser").value;
+    const logPassword = document.getElementById("logPassword").value;
+
+
+});
