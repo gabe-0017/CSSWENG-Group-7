@@ -78,13 +78,15 @@ document.addEventListener("DOMContentLoaded", async function () {
             const cellDateStr = toDateStr(info.date);
             const cellDate = new Date(info.date);
             cellDate.setHours(0, 0, 0, 0);
-
-            if (bookedDates.includes(cellDateStr)) {
-                info.el.style.backgroundColor = "#ffb3b3"; // red — booked
+        
+            if (cellDate < today) {
+                // white — past dates (do nothing)
+            } else if (bookedDates.includes(cellDateStr)) {
+                info.el.style.backgroundColor = "#ffb3b3"; // red — booked dates
             } else if (cellDate < minimumBookingDate) {
-                info.el.style.backgroundColor = "#fff0a0"; // yellow — past or < 3-day notice
+                info.el.style.backgroundColor = "#fff0a0"; // yellow — grace period
             } else {
-                info.el.style.backgroundColor = "#d4f5ef"; // green — available
+                info.el.style.backgroundColor = "#d4f5ef"; // green — available dates
             }
         },
 
