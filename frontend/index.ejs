@@ -37,41 +37,55 @@
   <!-- ── PORTFOLIO ── -->
   <section class="portfolio" id="portfolio">
     <div class="portfolio-inner">
-      <h2 class="section-heading">View Portfolio</h2>
+      
+      <div class="portfolio-admin-controls" style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+        <button class="btn btn-primary" id="add-portfolio-btn">Add Portfolio Item</button>
+      </div>
+
+      <h2 class="section-heading" style="margin-top: 0;">View Portfolio</h2>
   
       <div class="portfolio-grid">
-  
-        <div class="portfolio-item">
-          <img src="images/489955354_1100202765461115_2396312437974451255_n.jpg" alt="Party Tray">
-            <div class="portfolio-label">
-            Party Trays
-          </div>
-        </div>
-  
-        <div class="portfolio-item">
-          <img src="images/489827343_1100973872050671_2596197340560491257_n.jpg" alt="Meal box">
-          <div class="portfolio-label">
-            Meal boxes
-          </div>
-        </div>
-  
-        <div class="portfolio-item">
-          <img src="images/491385366_1105336538281071_5570610922383578474_n.jpg" alt="Grazing Table">
-          <div class="portfolio-label">
-            Grazing Tables
-          </div>
-        </div>
-  
-        <div class="portfolio-item">
-          <img src="images/489821395_1100472665434125_4050857798346935465_n.jpg" alt="Event">
-          <div class="portfolio-label">
-            Events
-          </div>
-        </div>
-  
+        <% if (portfolioItems && portfolioItems.length > 0) { %>
+          <% portfolioItems.forEach(function(item) { %>
+            <a href="/portfolio/<%= item.id %>" class="portfolio-item">
+              <% if (item.portfolio_images && item.portfolio_images.length > 0) { %>
+                <img src="<%= item.portfolio_images[0].image_url %>" alt="<%= item.portfolio_title %>">
+              <% } else { %>
+                <div class="portfolio-no-image">No image yet</div>
+              <% } %>
+              <div class="portfolio-label"><%= item.portfolio_title %></div>
+            </a>
+          <% }) %>
+        <% } else { %>
+          <p class="portfolio-empty-message">No portfolio items yet. Add one using the button above!</p>
+        <% } %>
       </div>
     </div>
   </section>
+
+  <div id="portfolio-modal" class="modal-overlay">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3 class="modal-title">Add New Portfolio Item</h3>
+      <form class="modal-form" onsubmit="event.preventDefault();">
+        <div class="form-group">
+          <label for="item-title">Portfolio Title</label>
+          <input type="text" id="portfolio-title" placeholder="e.g., Gourmet Wedding Buffet Spread" required />
+        </div>
+        <div class="form-group">
+          <label for="item-category">Portfolio Description</label>
+          <input type="text" id="portfolio-description" placeholder="e.g., Custom Events" required />
+        </div>
+        <div class="form-group">
+          <label for="item-image">Upload Image Cover</label>
+          <input type="file" id="item-image" name="images" accept="image/*" multiple />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save Portfolio Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- ── PACKAGES ── -->
   <section class="packages" id="packages">
@@ -299,7 +313,69 @@
 
 </div>
 
+<script>
+    const modal = document.getElementById('portfolio-modal');
+    const openBtn = document.getElementById('add-portfolio-btn');
+    const closeBtn = document.querySelector('.close-modal');
+    const modalForm = document.querySelector('.modal-form');
 
+    // Display modal
+    openBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+    });
+
+    // Dismiss modal via Close (X) button
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+      modalForm.reset();
+    });
+
+    // Dismiss modal if background shade is clicked
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        modalForm.reset();
+      }
+    });
+
+    // Handle Form Submission to Database
+    modalForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const titleValue = document.getElementById('portfolio-title').value;
+      const descriptionValue = document.getElementById('portfolio-description').value;
+      const imageFiles = document.getElementById('item-image').files;
+
+      const formData = new FormData();
+      formData.append('title', titleValue);
+      formData.append('description', descriptionValue);
+      for (const file of imageFiles) {
+        formData.append('images', file);
+      }
+
+      try {
+        // No Content-Type header — browser sets it automatically with the correct multipart boundary
+        const response = await fetch('/portfolio', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          alert(result.message);
+          modalForm.reset();
+          modal.classList.remove('active');
+          window.location.reload();
+        } else {
+          alert('Error: ' + (result.error || 'Something went wrong.'));
+        }
+      } catch (error) {
+        console.error('Network Error:', error);
+        alert('Network connection error. Failed to reach the server.');
+      }
+    });
+  </script>
   <!-- ── CONTACT ── -->
   <section class="contact" id="contact">
     <div class="contact-inner">

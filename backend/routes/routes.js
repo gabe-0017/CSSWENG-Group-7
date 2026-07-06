@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const supabase = require("../supabaseclient");
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
 
 // =========================
 // HOME PAGE
@@ -8,7 +10,26 @@ const supabase = require("../supabaseclient");
 
 router.get("/", async (req, res) => {
     try {
-        res.render("index");
+        const { data: portfolioItems, error: portfolioError } = await supabase
+      .from('portfolio')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (portfolioError) throw portfolioError;
+
+    const { data: allImages, error: imagesError } = await supabase
+      .from('portfolio_images')
+      .select('portfolio_id, image_url');
+
+    if (imagesError) throw imagesError;
+
+    // Attach images to each portfolio item without relying on a DB-level FK join
+    const itemsWithImages = portfolioItems.map(item => ({
+      ...item,
+      portfolio_images: (allImages || []).filter(img => img.portfolio_id === item.id)
+    }));
+
+    res.render("index", { portfolioItems: itemsWithImages });
     } catch (error) {
         console.error("Error rendering page:", error);
         res.status(500).send("Unable to load page.");
@@ -35,6 +56,81 @@ router.get("/booking-dates", async (req, res) => {
             message: "Unable to fetch booking dates."
         });
     }
+});
+
+// Creates a new portfolio item with optional image uploads
+router.post("/portfolio", upload.array('images', 10), async (req, res) => {
+  const { title, description } = req.body;
+  const files = req.files;
+
+  if (!title || !description) {
+    return res.status(400).json({ error: "Both title and description are required." });
+  }
+
+  try {
+    const { data: portfolio, error: portfolioError } = await supabase
+      .from('portfolio')
+      .insert([{ portfolio_title: title, portfolio_desc: description }])
+      .select()
+      .single();
+
+    if (portfolioError) throw portfolioError;
+
+    if (files && files.length > 0) {
+      for (const file of files) {
+        const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const storagePath = `${portfolio.id}/${Date.now()}-${safeName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('portfolio-images')
+          .upload(storagePath, file.buffer, { contentType: file.mimetype });
+
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = supabase.storage
+          .from('portfolio-images')
+          .getPublicUrl(storagePath);
+
+        const { error: imageError } = await supabase
+          .from('portfolio_images')
+          .insert([{ portfolio_id: portfolio.id, image_url: urlData.publicUrl }]);
+
+        if (imageError) throw imageError;
+      }
+    }
+
+    res.status(201).json({ success: true, message: "Portfolio item saved successfully!", data: portfolio });
+  } catch (error) {
+    console.error('Error saving portfolio item:', error);
+    res.status(500).json({ error: "Failed to upload portfolio item to the database." });
+  }
+});
+
+// Renders individual portfolio item detail page
+router.get("/portfolio/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data: item, error: itemError } = await supabase
+      .from('portfolio')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (itemError) throw itemError;
+
+    const { data: images, error: imagesError } = await supabase
+      .from('portfolio_images')
+      .select('image_url')
+      .eq('portfolio_id', id);
+
+    if (imagesError) throw imagesError;
+
+    res.render("portfolio-item", { item, images });
+  } catch (error) {
+    console.error('Error fetching portfolio item:', error);
+    res.status(404).send("Portfolio item not found.");
+  }
 });
 
 // =========================
