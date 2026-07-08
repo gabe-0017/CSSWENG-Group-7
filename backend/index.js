@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const routes = require("./routes/routes");
+const path = require("path");
 
 dotenv.config();
 
@@ -13,7 +14,7 @@ const port = process.env.PORT || 3000;
 // =========================
 
 app.set("view engine", "ejs");
-app.set("views", "../frontend");
+app.set("views", path.join(__dirname, "../frontend"));
 
 // =========================
 // Middleware

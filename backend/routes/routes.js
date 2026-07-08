@@ -259,6 +259,62 @@ router.put("/portfolio/:id", async (req, res) => {
   }
 });
 
+// Updates portfolio cover image
+router.put("/portfolio/:id/cover", upload.single('cover'), async (req, res) => {
+  const { id } = req.params;
+  const file = req.file;
+
+  if (!file) {
+    return res.status(400).json({ error: "No image provided." });
+  }
+
+  try {
+    const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const storagePath = `${id}/cover-${Date.now()}-${safeName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('portfolio-images')
+      .upload(storagePath, file.buffer, { contentType: file.mimetype });
+
+    if (uploadError) throw uploadError;
+
+    const { data: urlData } = supabase.storage
+      .from('portfolio-images')
+      .getPublicUrl(storagePath);
+
+    // Update the first image in portfolio_images as the cover
+    const { data: firstImage, error: fetchError } = await supabase
+      .from('portfolio_images')
+      .select('id')
+      .eq('portfolio_id', id)
+      .order('id', { ascending: true })
+      .limit(1)
+      .single();
+
+    if (fetchError || !firstImage) {
+      // No existing images — just insert as new
+      const { error: insertError } = await supabase
+        .from('portfolio_images')
+        .insert([{ portfolio_id: Number(id), image_url: urlData.publicUrl }]);
+
+      if (insertError) throw insertError;
+    } else {
+      // Update the first image's URL
+      const { error: updateError } = await supabase
+        .from('portfolio_images')
+        .update({ image_url: urlData.publicUrl })
+        .eq('id', firstImage.id);
+
+      if (updateError) throw updateError;
+    }
+
+    res.json({ success: true, message: "Cover image updated successfully!", image_url: urlData.publicUrl });
+  } catch (error) {
+    console.error('Error updating cover image:', error);
+    res.status(500).json({ error: "Failed to update cover image." });
+  }
+});
+
 // Adds images to existing portfolio item
 router.post("/portfolio/:id/images", upload.array('images', 10), async (req, res) => {
   const { id } = req.params;
