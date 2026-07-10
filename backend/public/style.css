@@ -1,0 +1,1070 @@
+/* ── RESET & BASE ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  color: #4a3728;
+  background: #fff;
+}
+
+/* ── GRADIENT BACKGROUND UTILITY ── */
+/* Shared gradient used across hero, packages, contact sections */
+.hero,
+.packages,
+.contact {
+  background: linear-gradient(
+    135deg,
+    #f9b8d0 0%,
+    #fad4e8 25%,
+    #fce8f4 45%,
+    #fdf3fa 55%,
+    #e8f7f5 75%,
+    #b8ede5 100%
+  );
+}
+
+/* ── NAVBAR ── */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 40px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(200, 160, 180, 0.2);
+}
+
+.nav-brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-main {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #5a3a28;
+  letter-spacing: 0.02em;
+}
+
+.brand-sub {
+  font-size: 0.65rem;
+  color: #a07060;
+  letter-spacing: 0.04em;
+  font-weight: 300;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #5a3a28;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: #c06080;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: calc(100vh - 57px);
+  display: flex;
+  align-items: center;
+  padding: 80px 40px;
+}
+
+.hero-content {
+  max-width: 700px;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 6vw, 4.5rem);
+  font-weight: 700;
+  color: #5a3a28;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+}
+
+.hero-byline {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: #8a6050;
+  letter-spacing: 0.08em;
+  margin-bottom: 36px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: #6dcfc4;
+  color: #fff;
+  border: none;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #5a3a28;
+  border: 1.5px solid rgba(90, 58, 40, 0.35);
+}
+
+/* ── PACKAGES ── */
+.packages {
+  padding: 60px 40px 80px;
+}
+
+.packages-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.package-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: 18px;
+  padding: 36px 40px;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  box-shadow: 0 4px 24px rgba(160, 80, 120, 0.08);
+  backdrop-filter: blur(6px);
+}
+
+.package-details {
+  flex: 1.4;
+}
+
+.package-rates {
+  flex: 0.9;
+  border-left: 1.5px solid rgba(160, 80, 120, 0.15);
+  padding-left: 32px;
+}
+
+.package-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #5a3a28;
+  margin-bottom: 10px;
+}
+
+.package-list {
+  list-style: disc;
+  padding-left: 18px;
+  margin-bottom: 16px;
+}
+
+.package-list li {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: #6a4a38;
+  margin-bottom: 2px;
+}
+
+.venue-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #5a3a28;
+  margin-bottom: 8px;
+}
+
+.rates-title {
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #5a3a28;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+
+.rates-list {
+  list-style: disc;
+  padding-left: 18px;
+  margin-bottom: 12px;
+}
+
+.rates-list li {
+  font-size: 0.85rem;
+  color: #5a3a28;
+  line-height: 1.9;
+}
+
+.rate-pax {
+  font-weight: 700;
+}
+
+.rate-price {
+  font-weight: 400;
+}
+
+.rates-note {
+  font-size: 0.72rem;
+  color: #9a7060;
+  line-height: 1.5;
+  font-style: italic;
+  margin-bottom: 2px;
+}
+
+/* ── PORTFOLIO ── */
+.portfolio {
+  background: rgba(255, 255, 255, 0.6);
+  padding: 80px 40px;
+  text-align: center;
+}
+
+.portfolio-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #5a3a28;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.portfolio-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(160, 80, 120, 0.08);
+}
+
+.portfolio-item img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.portfolio-item:hover img {
+  transform: scale(1.05);
+}
+
+.portfolio-label {
+  font-family: 'Playfair Display', serif;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 40px 18px 14px;
+
+  padding: 14px 18px;
+
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+
+  color: white;
+  font-size: 1.25rem; 
+  -webkit-text-stroke: 3px #5a3a28;
+  paint-order: stroke fill;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* ── CONTACT ── */
+.contact {
+  padding: 80px 40px 100px;
+}
+
+.contact-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: #5a3a28;
+  margin-bottom: 48px;
+}
+
+.contact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.contact-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  color: #6a4a38;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(160, 80, 120, 0.12);
+}
+
+.contact-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #5a3a28;
+  letter-spacing: 0.01em;
+}
+
+.contact-link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(90, 58, 40, 0.4);
+  transition: color 0.2s;
+}
+
+.contact-link:hover {
+  color: #c06080;
+  text-decoration-color: #c06080;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .navbar {
+    padding: 14px 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .nav-links {
+    gap: 16px;
+  }
+
+  .hero {
+    padding: 60px 24px;
+  }
+
+  .packages {
+    padding: 40px 20px 60px;
+  }
+
+  .package-card {
+    flex-direction: column;
+    padding: 28px 24px;
+    gap: 24px;
+  }
+
+  .package-card--right {
+    align-self: unset;
+    width: 100%;
+  }
+
+  .package-rates {
+    border-left: none;
+    border-top: 1.5px solid rgba(160, 80, 120, 0.15);
+    padding-left: 0;
+    padding-top: 20px;
+  }
+
+  .contact {
+    padding: 60px 24px 80px;
+  }
+}
+
+/* BOOKING MODAL */
+
+/* ==========================
+   BOOKING PAGE
+========================== */
+
+.booking-page {
+
+    min-height: 100vh;
+
+    background: #f8f3f4;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 50px 20px;
+
+}
+
+
+/* ==========================
+   BOOKING CARD
+========================== */
+
+.booking-container {
+
+    width: 100%;
+
+    max-width: 900px;
+
+    background: white;
+
+    border-radius: 25px;
+
+    padding: 50px;
+
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+
+}
+
+
+/* ==========================
+   HEADER
+========================== */
+
+.booking-container h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 42px;
+
+    color: #b8878d;
+
+    text-align: center;
+
+    margin-bottom: 10px;
+
+}
+
+
+.booking-subtitle {
+
+    text-align: center;
+
+    color: #777;
+
+    margin-bottom: 40px;
+
+    font-size: 16px;
+
+}
+
+
+/* ==========================
+   SECTION TITLES
+========================== */
+
+.section-title {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 24px;
+
+    color: #b8878d;
+
+    border-bottom: 1px solid #f0dfe1;
+
+    padding-bottom: 10px;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* ==========================
+   FORM LAYOUT
+========================== */
+
+.form-row {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+}
+
+
+.form-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    margin-bottom: 22px;
+
+}
+
+
+.form-group label {
+
+    margin-bottom: 8px;
+
+    color: #666;
+
+    font-weight: 600;
+
+    font-size: 15px;
+
+}
+
+
+/* ==========================
+   INPUTS
+========================== */
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 15px 18px;
+
+    border-radius: 12px;
+
+    border: 1px solid #ddd;
+
+    background: white;
+
+    font-size: 15px;
+
+    font-family: "Lato", sans-serif;
+
+    transition: 0.3s ease;
+
+}
+
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+
+    color: #aaa;
+
+}
+
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+
+    outline: none;
+
+    border-color: #d8a2a9;
+
+    box-shadow: 0 0 0 4px rgba(216,162,169,0.2);
+
+}
+
+
+/* ==========================
+   TEXTAREA
+========================== */
+
+textarea {
+
+    resize: vertical;
+
+}
+
+
+/* ==========================
+   BUTTON
+========================== */
+
+.book-btn {
+
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 18px;
+
+    border: none;
+
+    border-radius: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #d8a2a9,
+        #c88d96
+    );
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s ease;
+
+}
+
+
+.book-btn:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 10px 25px rgba(200,141,150,0.35);
+
+}
+
+
+/* ==========================
+   MOBILE VIEW
+========================== */
+
+@media (max-width: 768px) {
+
+    .booking-container {
+
+        padding: 30px;
+
+    }
+
+
+    .form-row {
+
+        grid-template-columns: 1fr;
+
+        gap: 0;
+
+    }
+
+
+    .booking-container h2 {
+
+        font-size: 32px;
+
+    }
+
+}
+
+/* ==========================
+   FULLCALENDAR CUSTOM
+========================== */
+
+.fc {
+
+    font-family: "Lato", sans-serif;
+
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-theme-standard .fc-scrollgrid {
+
+    border-color: #f0e6e8;
+
+}
+
+.fc .fc-toolbar-title{
+
+    font-family:"Playfair Display", serif;
+
+    color:#b8878d;
+
+    font-size:32px;
+
+}
+
+.fc .fc-button{
+
+    background:#d8a2a9 !important;
+
+    border:none !important;
+
+    border-radius:10px !important;
+
+    box-shadow:none !important;
+
+}
+
+.fc .fc-button:hover{
+
+    background:#c88d96 !important;
+
+}
+
+.fc-daygrid-day:hover{
+
+    background:#fff7f8;
+
+    cursor:pointer;
+
+}
+
+.fc-day-today{
+
+    background:#fff0f2 !important;
+
+}
+
+.fc-event{
+
+    border:none;
+
+}
+
+.fc-bg-event{
+
+    opacity:.4;
+
+}
+
+#calendar{
+
+    margin-top:20px;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    border:1px solid #f3e7e9;
+
+}
+
+/* ==========================
+   CALENDAR DATE COLORS
+========================== */
+
+.fc .booked-date {
+    background-color: #ffb3b3 !important;
+    opacity: 1 !important;
+}
+
+.fc .notice-date {
+    background-color: #fff0a0 !important;
+    opacity: 1 !important;
+}
+
+.fc-daygrid-day.selected-date {
+    outline: 3px solid #6dcfc4;
+    outline-offset: -3px;
+    border-radius: 4px;
+}
+
+.fc .fc-daygrid-day:has(.booked-date),
+.fc .fc-daygrid-day:has(.notice-date) {
+    cursor: not-allowed;
+}
+
+
+/* ── PORTFOLIO GRID: CLICKABLE CARD ── */
+a.portfolio-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.portfolio-no-image {
+  width: 100%;
+  height: 300px;
+  background: rgba(109, 207, 196, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a07060;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+}
+
+.portfolio-empty-message {
+  font-family: 'Lato', sans-serif;
+  color: #a07060;
+  text-align: center;
+  padding: 40px 0;
+  grid-column: 1 / -1;
+}
+
+/* ── PORTFOLIO DETAIL PAGE ── */
+.portfolio-detail {
+  padding: 60px 40px 100px;
+  min-height: calc(100vh - 57px);
+}
+
+.portfolio-detail-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.portfolio-back-btn {
+  display: inline-block;
+  margin-bottom: 36px;
+}
+
+.portfolio-detail-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: #5a3a28;
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.portfolio-detail-desc {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.05rem;
+  color: #6a4a38;
+  margin-bottom: 48px;
+  max-width: 640px;
+  line-height: 1.7;
+}
+
+.portfolio-detail-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.portfolio-detail-gallery img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(160, 80, 120, 0.08);
+  display: block;
+}
+
+.portfolio-detail-empty {
+  font-family: 'Lato', sans-serif;
+  color: #a07060;
+  text-align: center;
+  padding: 60px 0;
+  font-size: 1rem;
+}
+
+/* ── PORTFOLIO MODAL STYLES ── */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(90, 58, 40, 0.4); /* Ambient branding brown overlay */
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 18px; /* Matches package card border styling */
+  padding: 36px 40px;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 12px 36px rgba(160, 80, 120, 0.15); /* Shared ambient pink/purple shadow */
+  position: relative;
+  transform: translateY(-24px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+  transform: translateY(0);
+}
+
+.close-modal {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  font-size: 1.8rem;
+  color: #a07060;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.close-modal:hover {
+  color: #c06080; /* Changes to theme link hover pink */
+}
+
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #5a3a28;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.form-group label {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #5a3a28;
+  letter-spacing: 0.02em;
+}
+
+.form-group input[type="text"] {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(90, 58, 40, 0.2);
+  color: #4a3728;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input[type="text"]:focus {
+  border-color: #6dcfc4; /* Focus turns into the main accent teal */
+  box-shadow: 0 0 0 3px rgba(109, 207, 196, 0.15);
+}
+
+.form-group input[type="file"] {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  color: #6a4a38;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.modal-form .form-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── PORTFOLIO ACTION BUTTONS ── */
+.portfolio-action-btns {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+/* ── DANGER BUTTON ── */
+.btn-danger {
+  background: #e07070;
+  color: #fff;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: #c85a5a;
+}
+
+/* ── GALLERY ITEM (image + delete button wrapper) ── */
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(160, 80, 120, 0.08);
+}
+
+.delete-image-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(220, 80, 80, 0.85);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.delete-image-btn:hover {
+  background: rgba(180, 40, 40, 0.95);
+}

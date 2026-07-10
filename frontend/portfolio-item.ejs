@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= item.portfolio_title %> — The Caterer & Co</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-main">The Caterer & Co</span>
+      <span class="brand-sub">by Amosco Event Catering Services</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/#packages">View Packages</a></li>
+      <li><a href="/#portfolio">View Portfolio</a></li>
+      <li><a href="/#contact">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── PORTFOLIO DETAIL ── -->
+  <section class="portfolio-detail">
+    <div class="portfolio-detail-inner">
+
+      <a href="/#portfolio" class="btn btn-secondary portfolio-back-btn">&#8592; Back to Portfolio</a>
+      <div class="portfolio-action-btns">
+        <button class="btn btn-primary" id="edit-portfolio-btn">Edit Portfolio</button>
+        <button class="btn btn-danger" id="delete-portfolio-btn">Delete Portfolio</button>
+      </div>
+
+      <h1 class="portfolio-detail-title"><%= item.portfolio_title %></h1>
+      <p class="portfolio-detail-desc"><%= item.portfolio_desc %></p>
+
+      <% if (images && images.length > 0) { %>
+        <div class="portfolio-detail-gallery" id="image-gallery">
+          <% images.forEach(function(img) { %>
+            <div class="gallery-item" data-image-id="<%= img.id %>">
+              <img src="<%= img.image_url %>" alt="<%= item.portfolio_title %>" />
+              <button class="delete-image-btn" data-image-id="<%= img.id %>">&#10005;</button>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="portfolio-detail-empty" id="empty-gallery-msg">No images have been added to this portfolio yet.</p>
+      <% } %>
+
+    </div>
+  </section>
+
+  <!-- ── EDIT MODAL ── -->
+  <div class="modal-overlay" id="edit-modal">
+    <div class="modal-content">
+      <span class="close-modal" id="close-edit-modal">&times;</span>
+      <h3 class="modal-title">Edit Portfolio</h3>
+
+      <form class="modal-form" id="edit-form">
+
+        <div class="form-group">
+          <label>Portfolio Title</label>
+          <input type="text" id="edit-title" value="<%= item.portfolio_title %>" required />
+        </div>
+
+        <div class="form-group">
+          <label>Portfolio Description</label>
+          <input type="text" id="edit-description" value="<%= item.portfolio_desc %>" required />
+        </div>
+
+        <div class="form-group">
+          <label>Update Portfolio Cover Image</label>
+          <input type="file" id="edit-cover" accept="image/*" />
+        </div>
+
+        <div class="form-group">
+          <label>Add New Images</label>
+          <input type="file" id="edit-images" accept="image/*" multiple />
+        </div>
+
+        <div class="form-actions" style="justify-content: space-between;">
+          <button type="button" class="btn btn-danger" id="delete-all-images-btn">Delete All Images</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+<script>
+  const itemId = "<%= item.id %>";
+
+  // ── EDIT MODAL ──
+  const editModal = document.getElementById('edit-modal');
+  const editBtn = document.getElementById('edit-portfolio-btn');
+  const closeEditBtn = document.getElementById('close-edit-modal');
+  const editForm = document.getElementById('edit-form');
+
+  editBtn.addEventListener('click', () => editModal.classList.add('active'));
+
+  closeEditBtn.addEventListener('click', () => {
+    editModal.classList.remove('active');
+    editForm.reset();
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === editModal) {
+      editModal.classList.remove('active');
+      editForm.reset();
+    }
+  });
+
+  // ── SAVE CHANGES (title + description + new images) ──
+  editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const title = document.getElementById('edit-title').value;
+    const description = document.getElementById('edit-description').value;
+    const imageFiles = document.getElementById('edit-images').files;
+
+    try {
+      const updateRes = await fetch(`/portfolio/${itemId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description })
+      });
+
+      const updateResult = await updateRes.json();
+      if (!updateRes.ok) {
+        alert('Error updating details: ' + (updateResult.error || 'Something went wrong.'));
+        return;
+      }
+    } catch (err) {
+      alert('Network error while updating details.');
+      return;
+    }
+
+    const coverFile = document.getElementById('edit-cover').files[0];
+    if (coverFile) {
+      const coverData = new FormData();
+      coverData.append('cover', coverFile);
+
+      try {
+        const coverRes = await fetch(`/portfolio/${itemId}/cover`, {
+          method: 'PUT',
+          body: coverData
+        });
+
+        const coverResult = await coverRes.json();
+        if (!coverRes.ok) {
+          alert('Error updating cover: ' + (coverResult.error || 'Something went wrong.'));
+          return;
+        }
+      } catch (err) {
+        alert('Network error while updating cover image.');
+        return;
+      }
+    }
+
+    if (imageFiles.length > 0) {
+      const formData = new FormData();
+      for (const file of imageFiles) formData.append('images', file);
+
+      try {
+        const uploadRes = await fetch(`/portfolio/${itemId}/images`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const uploadResult = await uploadRes.json();
+        if (!uploadRes.ok) {
+          alert('Error uploading images: ' + (uploadResult.error || 'Something went wrong.'));
+          return;
+        }
+      } catch (err) {
+        alert('Network error while uploading images.');
+        return;
+      }
+    }
+
+    alert('Portfolio item updated successfully!');
+    editModal.classList.remove('active');
+    window.location.reload();
+  });
+
+  // ── DELETE SINGLE IMAGE ──
+  document.addEventListener('click', async (e) => {
+    if (!e.target.classList.contains('delete-image-btn')) return;
+
+    const imageId = e.target.dataset.imageId;
+    const confirmed = confirm('Delete this image?');
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`/portfolio/${itemId}/images/${imageId}`, {
+        method: 'DELETE'
+      });
+
+      const result = await res.json();
+      if (res.ok && result.success) {
+        const galleryItem = document.querySelector(`.gallery-item[data-image-id="${imageId}"]`);
+        if (galleryItem) galleryItem.remove();
+
+        const gallery = document.getElementById('image-gallery');
+        if (gallery && gallery.children.length === 0) {
+          gallery.remove();
+          const emptyMsg = document.createElement('p');
+          emptyMsg.className = 'portfolio-detail-empty';
+          emptyMsg.id = 'empty-gallery-msg';
+          emptyMsg.textContent = 'No images have been added to this portfolio yet.';
+          document.querySelector('.portfolio-detail-inner').appendChild(emptyMsg);
+        }
+      } else {
+        alert('Error: ' + (result.error || 'Failed to delete image.'));
+      }
+    } catch (err) {
+      alert('Network error while deleting image.');
+    }
+  });
+
+  // ── DELETE ALL IMAGES ──
+  document.getElementById('delete-all-images-btn').addEventListener('click', async () => {
+    const confirmed = confirm('Delete all images for this portfolio item?');
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`/portfolio/${itemId}/images`, { method: 'DELETE' });
+      const result = await res.json();
+
+      if (res.ok && result.success) {
+        alert('All images deleted.');
+        editModal.classList.remove('active');
+        window.location.reload();
+      } else {
+        alert('Error: ' + (result.error || 'Failed to delete all images.'));
+      }
+    } catch (err) {
+      alert('Network error while deleting all images.');
+    }
+  });
+
+  // ── DELETE PORTFOLIO ITEM ──
+  document.getElementById('delete-portfolio-btn').addEventListener('click', async () => {
+    const confirmed = confirm('Are you sure you want to delete this entire portfolio item? This cannot be undone.');
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`/portfolio/${itemId}`, { method: 'DELETE' });
+      const result = await res.json();
+
+      if (res.ok && result.success) {
+        alert('Portfolio item deleted.');
+        window.location.href = '/#portfolio';
+      } else {
+        alert('Error: ' + (result.error || 'Failed to delete portfolio item.'));
+      }
+    } catch (err) {
+      alert('Network error while deleting portfolio item.');
+    }
+  });
+</script>
+
+</body>
+</html>

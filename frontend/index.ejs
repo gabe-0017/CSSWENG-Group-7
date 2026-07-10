@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/main.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Caterer & Co</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-main">The Caterer & Co</span>
+      <span class="brand-sub">by Amosco Event Catering Services</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#packages">View Packages</a></li>
+      <li><a href="#portfolio">View Portfolio</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1 class="hero-title">The Caterer & Co</h1>
+      <p class="hero-byline">by Amosco Event Catering Services</p>
+      <div class="hero-actions">
+        <a href="#booking-page" class="btn btn-primary">Book Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PORTFOLIO ── -->
+  <section class="portfolio" id="portfolio">
+    <div class="portfolio-inner">
+      
+      <div class="portfolio-admin-controls" style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+        <button class="btn btn-primary" id="add-portfolio-btn">Add Portfolio Item</button>
+      </div>
+
+      <h2 class="section-heading" style="margin-top: 0;">View Portfolio</h2>
+  
+      <div class="portfolio-grid">
+        <% if (portfolioItems && portfolioItems.length > 0) { %>
+          <% portfolioItems.forEach(function(item) { %>
+            <a href="/portfolio/<%= item.id %>" class="portfolio-item">
+              <% if (item.portfolio_images && item.portfolio_images.length > 0) { %>
+                <img src="<%= item.portfolio_images[0].image_url %>" alt="<%= item.portfolio_title %>">
+              <% } else { %>
+                <div class="portfolio-no-image">No image yet</div>
+              <% } %>
+              <div class="portfolio-label"><%= item.portfolio_title %></div>
+            </a>
+          <% }) %>
+        <% } else { %>
+          <p class="portfolio-empty-message">No portfolio items yet. Add one using the button above!</p>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <div id="portfolio-modal" class="modal-overlay">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3 class="modal-title">Add New Portfolio Item</h3>
+      <form class="modal-form" onsubmit="event.preventDefault();">
+        <div class="form-group">
+          <label for="item-title">Portfolio Title</label>
+          <input type="text" id="portfolio-title" placeholder="e.g., Gourmet Wedding Buffet Spread" required />
+        </div>
+        <div class="form-group">
+          <label for="item-category">Portfolio Description</label>
+          <input type="text" id="portfolio-description" placeholder="e.g., Custom Events" required />
+        </div>
+        <div class="form-group">
+          <label for="item-image">Upload Image Cover</label>
+          <input type="file" id="item-image" name="images" accept="image/*" multiple />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save Portfolio Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── PACKAGES ── -->
+  <section class="packages" id="packages">
+    <div class="packages-inner">
+
+      <!-- Wedding Package -->
+      <div class="package-card">
+        <div class="package-details">
+          <h2 class="package-title">Wedding Package:</h2>
+          <ul class="package-list">
+            <li>Wedding Set-up tables based on the theme & motif</li>
+            <li>Monoblock Chair with Cover</li>
+            <li>Buffet Table Set-up</li>
+            <li>Complete catering equipment and utensils</li>
+            <li>Pork, Chicken, Fish or Vegetable, Pasta & Dessert, Plain rice</li>
+            <li>Purified Water and ice, House Blend Iced Tea</li>
+            <li>Uniformed Waiters and Buffet Attendants</li>
+            <li>Scheduled Food Tasting for 2 pax</li>
+          </ul>
+          <h3 class="venue-title">Venue Styling (Reception)</h3>
+          <ul class="package-list">
+            <li>Wedding Reception Set-up based on the theme & motif</li>
+            <li>Reception's Backdrop and Venue Wedding Design</li>
+            <li>Kneeler, Carpet and Aisle Set-up</li>
+            <li>Welcome Sign Board with Stand</li>
+          </ul>
+        </div>
+        <div class="package-rates">
+          <h3 class="rates-title">Rates:</h3>
+          <ul class="rates-list">
+            <li><span class="rate-pax">100 pax</span> : <span class="rate-price">900 PESOS/PAX</span></li>
+            <li><span class="rate-pax">75 pax</span> : <span class="rate-price">1,100 PESOS/PAX</span></li>
+            <li><span class="rate-pax">50 pax</span> : <span class="rate-price">1,250 PESOS/PAX</span></li>
+          </ul>
+          <p class="rates-note">OOTF may apply outside Bacoor Cavite.</p>
+          <p class="rates-note">"Prices are subject to change without prior notice."</p>
+        </div>
+      </div>
+
+      <!-- Birthday Package -->
+      <div class="package-card">
+        <div class="package-details">
+          <h2 class="package-title">Birthday Package:</h2>
+          <ul class="package-list">
+            <li>Table Set-up based on the theme & motif</li>
+            <li>Monoblock Chair with Cover</li>
+            <li>Buffet Table Set-up</li>
+            <li>Complete catering equipment and utensils</li>
+            <li>Pork, Chicken, Fish or Vegetable, Pasta & Dessert, Plain rice</li>
+            <li>Purified Water and ice, House Blend Iced Tea</li>
+            <li>Uniformed Waiters and Buffet Attendants</li>
+            <li>Scheduled Food Tasting for 2 pax</li>
+          </ul>
+          <h3 class="venue-title">Venue Styling (Reception)</h3>
+          <ul class="package-list">
+            <li>Basic Balloon Decoration with Themed Backdrop</li>
+            <li>Welcome Sign Board with Stand</li>
+          </ul>
+        </div>
+        <div class="package-rates">
+          <h3 class="rates-title">Rates:</h3>
+          <ul class="rates-list">
+            <li><span class="rate-pax">100 pax</span> : <span class="rate-price">650 PESOS/PAX</span></li>
+            <li><span class="rate-pax">75 pax</span> : <span class="rate-price">750 PESOS/PAX</span></li>
+            <li><span class="rate-pax">50 pax</span> : <span class="rate-price">800 PESOS/PAX</span></li>
+          </ul>
+          <p class="rates-note">"Prices are subject to change without prior notice."</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+   <!-- ── BOOKING ── -->
+<div class="booking-page" id="booking-page">
+
+  <div class="booking-container">
+
+    <h2>Book Your Event</h2>
+
+    <p class="booking-subtitle">
+      Tell us your event details and we'll create something memorable.
+    </p>
+
+    <form id="bookingForm" action="/book" method="POST">
+
+      <!-- Personal Information -->
+      <div class="section-title">
+        Personal Information
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" name="first_name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" name="last_name" required>
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label>Contact Number</label>
+          <input type="tel" name="contact_number" required>
+        </div>
+
+      </div>
+
+      <!-- Event Details -->
+      <div class="section-title">
+        Event Details
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>Event Type</label>
+          <input
+            type="text"
+            name="event_type"
+            placeholder="ex: Wedding, Birthday, Debut, etc."
+            required>
+        </div>
+
+        <div class="form-group">
+
+          <label>Design Motif</label>
+
+          <input
+            type="text"
+            name="design_motif"
+            placeholder="ex: Rustic Boho, Tropical, Botanical, Vintage, etc."
+            required>
+
+        </div>
+
+      </div>
+
+      <!-- Calendar -->
+      <div class="form-group">
+
+        <label>Choose Your Event Date</label>
+
+        <p class="calendar-note">
+          🟢 Available &nbsp;&nbsp;
+          🔴 Already Booked &nbsp;&nbsp;
+          🟡 Less than 3 days notice
+        </p>
+
+        <div id="calendar"></div>
+
+        <!-- Hidden field submitted to backend -->
+        <input
+          type="hidden"
+          id="event_date"
+          name="event_date"
+          required>
+
+        <small id="selectedDateText">
+          No date selected.
+        </small>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Venue Location</label>
+
+        <textarea
+          rows="4"
+          name="venue_location"
+          placeholder="Complete venue address"
+          required></textarea>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>Number of Guests</label>
+
+          <input
+            type="number"
+            name="number_of_guest"
+            placeholder="ex: 100"
+            min="1"
+            required>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Package (Optional)</label> <!-- Static for now, make dynamic once package manager is implemented -->
+
+          <select name="package">
+            <option value="">Choose Package</option>
+            <option value="Wedding Package">Wedding Package</option>
+            <option value="Birthday Package">Birthday Package</option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <button class="book-btn" type="submit">
+        Book Event
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<script>
+    const modal = document.getElementById('portfolio-modal');
+    const openBtn = document.getElementById('add-portfolio-btn');
+    const closeBtn = document.querySelector('.close-modal');
+    const modalForm = document.querySelector('.modal-form');
+
+    // Display modal
+    openBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+    });
+
+    // Dismiss modal via Close (X) button
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+      modalForm.reset();
+    });
+
+    // Dismiss modal if background shade is clicked
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        modalForm.reset();
+      }
+    });
+
+    // Handle Form Submission to Database
+    modalForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const titleValue = document.getElementById('portfolio-title').value;
+      const descriptionValue = document.getElementById('portfolio-description').value;
+      const imageFiles = document.getElementById('item-image').files;
+
+      const formData = new FormData();
+      formData.append('title', titleValue);
+      formData.append('description', descriptionValue);
+      for (const file of imageFiles) {
+        formData.append('images', file);
+      }
+
+      try {
+        // No Content-Type header — browser sets it automatically with the correct multipart boundary
+        const response = await fetch('/portfolio', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          alert(result.message);
+          modalForm.reset();
+          modal.classList.remove('active');
+          window.location.reload();
+        } else {
+          alert('Error: ' + (result.error || 'Something went wrong.'));
+        }
+      } catch (error) {
+        console.error('Network Error:', error);
+        alert('Network connection error. Failed to reach the server.');
+      }
+    });
+  </script>
+  <!-- ── CONTACT ── -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <h2 class="contact-heading">Contact Us:</h2>
+      <ul class="contact-list">
+        <li class="contact-item">
+          <span class="contact-icon">
+            <!-- Phone icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+              <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.36 11.36 0 003.56.57 1 1 0 011 1V21a1 1 0 01-1 1C10.61 22 2 13.39 2 3a1 1 0 011-1h3.5a1 1 0 011 1 11.36 11.36 0 00.57 3.56 1 1 0 01-.25 1.02l-2.2 2.21z"/>
+            </svg>
+          </span>
+          <span class="contact-text">0977 635 5824</span>
+        </li>
+        <li class="contact-item">
+          <span class="contact-icon">
+            <!-- Mail icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+              <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 2l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
+            </svg>
+          </span>
+          <a href="mailto:elimaramosco12345@gmail.com" class="contact-text contact-link">elimaramosco12345@gmail.com</a>
+        </li>
+        <li class="contact-item">
+          <span class="contact-icon">
+            <!-- Messenger icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
+              <path d="M12 2C6.477 2 2 6.145 2 11.255c0 2.857 1.33 5.408 3.424 7.12V22l3.116-1.713A10.56 10.56 0 0012 20.51c5.523 0 10-4.145 10-9.255S17.523 2 12 2zm1.008 12.46l-2.548-2.717-4.97 2.717 5.468-5.8 2.61 2.717 4.908-2.717-5.468 5.8z"/>
+            </svg>
+          </span>
+          <a href="https://www.facebook.com/catererco" class="contact-text contact-link">The Caterer & Co</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+<script src="script.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
+<script src="/script.js"></script>
+
+</body>
+</html>
