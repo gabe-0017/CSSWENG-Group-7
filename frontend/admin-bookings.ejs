@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Bookings — The Caterer & Co</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-main">The Caterer & Co</span>
+      <span class="brand-sub">by Amosco Event Catering Services</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/admin/bookings">Bookings</a></li>
+      <li><a href="/admin/settings">Settings</a></li>
+      <li><a href="/admin/logout">Logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── BOOKINGS ── -->
+  <div class="booking-page" style="align-items: flex-start; padding-top: 60px;">
+    <div class="booking-container" style="max-width: 1000px;">
+
+      <h2>Manage Bookings</h2>
+      <p class="booking-subtitle">Review and respond to booking requests.</p>
+
+      <!-- PENDING -->
+      <div class="section-title">Pending</div>
+      <% const pending = bookings.filter(b => b.status === 'pending'); %>
+      <% if (pending.length > 0) { %>
+        <% pending.forEach(function(booking) { %>
+          <div class="booking-card">
+            <div class="booking-card-header">
+              <span class="booking-name"><%= booking.first_name %> <%= booking.last_name %></span>
+              <span class="booking-date"><%= booking.event_date %></span>
+            </div>
+            <div class="booking-card-details">
+              <p><strong>Email:</strong> <%= booking.email %></p>
+              <p><strong>Contact:</strong> <%= booking.contact_number %></p>
+              <p><strong>Event Type:</strong> <%= booking.event_type %></p>
+              <p><strong>Venue:</strong> <%= booking.venue_location %></p>
+              <p><strong>Guests:</strong> <%= booking.number_of_guest %></p>
+              <p><strong>Package:</strong> <%= booking.package || 'None selected' %></p>
+              <p><strong>Design Motif:</strong> <%= booking.design_motif || 'None specified' %></p>
+            </div>
+            <div class="booking-card-actions">
+              <form action="/admin/bookings/<%= booking.id %>/accept" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-primary">Accept</button>
+              </form>
+              <form action="/admin/bookings/<%= booking.id %>/reject" method="POST" style="display:inline;" onsubmit="return promptReason(this)">
+                <input type="hidden" name="reason" class="reject-reason-input" />
+                <button type="submit" class="btn btn-danger">Reject</button>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="portfolio-empty-message">No pending bookings.</p>
+      <% } %>
+
+      <!-- ACCEPTED -->
+      <div class="section-title" style="margin-top: 40px;">Accepted</div>
+      <% const accepted = bookings.filter(b => b.status === 'accepted'); %>
+      <% if (accepted.length > 0) { %>
+        <% accepted.forEach(function(booking) { %>
+          <div class="booking-card booking-card--accepted">
+            <div class="booking-card-header">
+              <span class="booking-name"><%= booking.first_name %> <%= booking.last_name %></span>
+              <span class="booking-date"><%= booking.event_date %></span>
+            </div>
+            <div class="booking-card-details">
+              <p><strong>Email:</strong> <%= booking.email %></p>
+              <p><strong>Event Type:</strong> <%= booking.event_type %></p>
+              <p><strong>Venue:</strong> <%= booking.venue_location %></p>
+              <p><strong>Guests:</strong> <%= booking.number_of_guest %></p>
+              <p><strong>Package:</strong> <%= booking.package || 'None selected' %></p>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="portfolio-empty-message">No accepted bookings.</p>
+      <% } %>
+
+      <!-- REJECTED -->
+      <div class="section-title" style="margin-top: 40px;">Rejected</div>
+      <% const rejected = bookings.filter(b => b.status === 'rejected'); %>
+      <% if (rejected.length > 0) { %>
+        <% rejected.forEach(function(booking) { %>
+          <div class="booking-card booking-card--rejected">
+            <div class="booking-card-header">
+              <span class="booking-name"><%= booking.first_name %> <%= booking.last_name %></span>
+              <span class="booking-date"><%= booking.event_date %></span>
+            </div>
+            <div class="booking-card-details">
+              <p><strong>Email:</strong> <%= booking.email %></p>
+              <p><strong>Event Type:</strong> <%= booking.event_type %></p>
+              <p><strong>Venue:</strong> <%= booking.venue_location %></p>
+              <p><strong>Guests:</strong> <%= booking.number_of_guest %></p>
+              <p><strong>Package:</strong> <%= booking.package || 'None selected' %></p>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="portfolio-empty-message">No rejected bookings.</p>
+      <% } %>
+
+    </div>
+  </div>
+
+<script>
+  function promptReason(form) {
+    const reason = prompt("Please enter a reason for rejection:");
+    if (!reason || reason.trim() === "") {
+      alert("A rejection reason is required.");
+      return false;
+    }
+    form.querySelector('.reject-reason-input').value = reason;
+    return true;
+  }
+</script>
+
+</body>
+</html>
