@@ -5,6 +5,16 @@ const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 
 // =========================
+// AUTH MIDDLEWARE
+// =========================
+function requireAdmin(req, res, next) {
+    if (req.session && req.session.isAdmin) {
+        return next();
+    }
+    res.redirect("/admin/login");
+}
+
+// =========================
 // HOME PAGE
 // =========================
 
@@ -29,11 +39,163 @@ router.get("/", async (req, res) => {
       portfolio_images: (allImages || []).filter(img => img.portfolio_id === item.id)
     }));
 
-    res.render("index", { portfolioItems: itemsWithImages });
+    res.render("index", { portfolioItems: itemsWithImages, isAdmin: req.session.isAdmin || false });
     } catch (error) {
         console.error("Error rendering page:", error);
         res.status(500).send("Unable to load page.");
     }
+});
+
+// =========================
+// ADMIN LOGIN PAGE
+// =========================
+router.get("/admin/login", (req, res) => {
+    if (req.session.isAdmin) return res.redirect("/");
+    res.render("admin-login", { error: null });
+});
+
+// =========================
+// ADMIN LOGIN SUBMIT
+// =========================
+router.post("/admin/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const { data, error } = await supabase
+            .from("admin_accounts")
+            .select("*")
+            .eq("email", email)
+            .eq("password", password)
+            .single();
+
+        if (error || !data) {
+            return res.render("admin-login", { error: "Invalid username or password." });
+        }
+
+        req.session.isAdmin = true;
+        req.session.adminEmail = data.email;
+        res.redirect("/");
+
+    } catch (err) {
+        console.error(err);
+        res.render("admin-login", { error: "Something went wrong. Please try again." });
+    }
+});
+
+// =========================
+// ADMIN LOGOUT
+// =========================
+router.get("/admin/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/");
+    });
+});
+
+// =========================
+// ADMIN SETTINGS PAGE
+// =========================
+router.get("/admin/settings", requireAdmin, (req, res) => {
+    res.render("admin-settings", { 
+        success: null, 
+        error: null,
+        adminEmail: req.session.adminEmail
+    });
+});
+
+// =========================
+// UPDATE ADMIN EMAIL
+// =========================
+router.post("/admin/settings/email", requireAdmin, async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const { error } = await supabase
+            .from("admin_accounts")
+            .update({ email })
+            .eq("email", req.session.adminEmail);
+
+        if (error) throw error;
+
+        req.session.adminEmail = email;
+        res.render("admin-settings", { 
+            success: "Email updated successfully!", 
+            error: null,
+            adminEmail: email
+        });
+    } catch (err) {
+        console.error(err);
+        res.render("admin-settings", { 
+            success: null, 
+            error: "Failed to update email.",
+            adminEmail: req.session.adminEmail
+        });
+    }
+});
+
+// =========================
+// UPDATE ADMIN PASSWORD
+// =========================
+router.post("/admin/settings/password", requireAdmin, async (req, res) => {
+    const { password, confirm_password } = req.body;
+
+    if (password !== confirm_password) {
+        return res.render("admin-settings", { 
+            success: null, 
+            error: "Passwords do not match.",
+            adminEmail: req.session.adminEmail
+        });
+    }
+
+    try {
+        const { error } = await supabase
+            .from("admin_accounts")
+            .update({ password })
+            .eq("email", req.session.adminEmail);
+
+        if (error) throw error;
+
+        res.render("admin-settings", { 
+            success: "Password updated successfully!", 
+            error: null,
+            adminEmail: req.session.adminEmail
+        });
+    } catch (err) {
+        console.error(err);
+        res.render("admin-settings", { 
+            success: null, 
+            error: "Failed to update password.",
+            adminEmail: req.session.adminEmail
+        });
+    }
+});
+
+// =========================
+// VIEW PORTFOLIO
+// =========================
+router.get("/portfolio/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data: item, error: itemError } = await supabase
+      .from('portfolio')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (itemError) throw itemError;
+
+    const { data: images, error: imagesError } = await supabase
+      .from('portfolio_images')
+      .select('id, image_url')
+      .eq('portfolio_id', id);
+
+    if (imagesError) throw imagesError;
+
+    res.render("portfolio-item", { item, images, isAdmin: req.session.isAdmin || false });
+  } catch (error) {
+    console.error('Error fetching portfolio item:', error);
+    res.status(404).send("Portfolio item not found.");
+  }
 });
 
 // =========================
@@ -44,7 +206,8 @@ router.get("/booking-dates", async (req, res) => {
     try {
         const { data, error } = await supabase
             .from("booking")
-            .select("event_date");
+            .select("event_date")
+            .eq("status", "accepted");
 
         if (error) throw error;
 
@@ -160,8 +323,12 @@ router.post("/book", async (req, res) => {
     }
 });
 
+// =========================
+// ADMIN FEATURES
+// =========================
+
 // Creates a new portfolio item with optional image uploads
-router.post("/portfolio", upload.array('images', 10), async (req, res) => {
+router.post("/portfolio", requireAdmin, upload.array('images', 10), async (req, res) => {
   const { title, description } = req.body;
   const files = req.files;
 
@@ -208,35 +375,8 @@ router.post("/portfolio", upload.array('images', 10), async (req, res) => {
   }
 });
 
-// Renders individual portfolio item detail page
-router.get("/portfolio/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const { data: item, error: itemError } = await supabase
-      .from('portfolio')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (itemError) throw itemError;
-
-    const { data: images, error: imagesError } = await supabase
-      .from('portfolio_images')
-      .select('id, image_url')
-      .eq('portfolio_id', id);
-
-    if (imagesError) throw imagesError;
-
-    res.render("portfolio-item", { item, images });
-  } catch (error) {
-    console.error('Error fetching portfolio item:', error);
-    res.status(404).send("Portfolio item not found.");
-  }
-});
-
 // Updates portfolio item (title and/or description)
-router.put("/portfolio/:id", async (req, res) => {
+router.put("/portfolio/:id", requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { title, description } = req.body;
 
@@ -260,7 +400,7 @@ router.put("/portfolio/:id", async (req, res) => {
 });
 
 // Updates portfolio cover image
-router.put("/portfolio/:id/cover", upload.single('cover'), async (req, res) => {
+router.put("/portfolio/:id/cover", requireAdmin, upload.single('cover'), async (req, res) => {
   const { id } = req.params;
   const file = req.file;
 
@@ -316,7 +456,7 @@ router.put("/portfolio/:id/cover", upload.single('cover'), async (req, res) => {
 });
 
 // Adds images to existing portfolio item
-router.post("/portfolio/:id/images", upload.array('images', 10), async (req, res) => {
+router.post("/portfolio/:id/images", requireAdmin, upload.array('images', 10), async (req, res) => {
   const { id } = req.params;
   const files = req.files;
 
@@ -360,7 +500,7 @@ router.post("/portfolio/:id/images", upload.array('images', 10), async (req, res
 });
 
 // Deletes single image in a portfolio item
-router.delete("/portfolio/:id/images/:imageId", async (req, res) => {
+router.delete("/portfolio/:id/images/:imageId", requireAdmin, async (req, res) => {
   const { id, imageId } = req.params;
 
   try {
@@ -397,7 +537,7 @@ router.delete("/portfolio/:id/images/:imageId", async (req, res) => {
 });
 
 // Deletes all images in a portfolio item
-router.delete("/portfolio/:id/images", async (req, res) => {
+router.delete("/portfolio/:id/images", requireAdmin, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -436,7 +576,7 @@ router.delete("/portfolio/:id/images", async (req, res) => {
 });
 
 // Deletes an entire portfolio item
-router.delete("/portfolio/:id", async (req, res) => {
+router.delete("/portfolio/:id", requireAdmin, async (req, res) => {
   const { id } = req.params;
 
   try {

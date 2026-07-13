@@ -1068,3 +1068,14 @@ a.portfolio-item {
 .delete-image-btn:hover {
   background: rgba(180, 40, 40, 0.95);
 }
+
+/* ── ADMIN LOGIN ERROR ── */
+.admin-login-error {
+  background: #fde8e8;
+  color: #c0392b;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  text-align: center;
+}
