@@ -1,20 +1,14 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD
-    }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // =========================
 // NOTIFY ADMIN OF NEW BOOKING
 // =========================
 async function notifyAdminNewBooking(booking) {
-    await transporter.sendMail({
-        from: `"The Caterer & Co" <${process.env.GMAIL_USER}>`,
-        to: process.env.GMAIL_USER,
+    await resend.emails.send({
+        from: "The Caterer & Co <onboarding@resend.dev>",
+        to: process.env.DEV_EMAIL, // change to ADMIN_EMAIL before passing to the client (in .env and render.com as well)
         subject: `New Booking Request — ${booking.first_name} ${booking.last_name}`,
         html: `
             <h2>New Booking Request</h2>
@@ -40,8 +34,8 @@ async function notifyAdminNewBooking(booking) {
 // NOTIFY CUSTOMER OF ACCEPTANCE
 // =========================
 async function notifyCustomerAccepted(booking) {
-    await transporter.sendMail({
-        from: `"The Caterer & Co" <${process.env.GMAIL_USER}>`,
+    await resend.emails.send({
+        from: "The Caterer & Co <onboarding@resend.dev>",
         to: booking.email,
         subject: `Your Booking has been Confirmed — ${booking.event_date}`,
         html: `
@@ -68,8 +62,8 @@ async function notifyCustomerAccepted(booking) {
 // NOTIFY CUSTOMER OF REJECTION
 // =========================
 async function notifyCustomerRejected(booking, reason) {
-    await transporter.sendMail({
-        from: `"The Caterer & Co" <${process.env.GMAIL_USER}>`,
+    await resend.emails.send({
+        from: "The Caterer & Co <onboarding@resend.dev>",
         to: booking.email,
         subject: `Update on Your Booking Request — ${booking.event_date}`,
         html: `
