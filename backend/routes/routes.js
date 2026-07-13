@@ -254,7 +254,8 @@ router.post("/book", async (req, res) => {
             await supabase
                 .from("booking")
                 .select("id")
-                .eq("event_date", event_date);
+                .eq("event_date", event_date)
+                .eq("status", "accepted");
 
         if (bookingError) throw bookingError;
 
