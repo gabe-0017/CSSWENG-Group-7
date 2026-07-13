@@ -20,6 +20,10 @@
       <li><a href="#packages">View Packages</a></li>
       <li><a href="#portfolio">View Portfolio</a></li>
       <li><a href="#contact">Contact Us</a></li>
+      <% if (isAdmin) { %>
+        <li><a href="/admin/settings">Settings</a></li>
+        <li><a href="/admin/logout">Logout</a></li>
+      <% } %>
     </ul>
   </nav>
 
@@ -38,9 +42,11 @@
   <section class="portfolio" id="portfolio">
     <div class="portfolio-inner">
       
+      <% if (isAdmin) { %>
       <div class="portfolio-admin-controls" style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
         <button class="btn btn-primary" id="add-portfolio-btn">Add Portfolio Item</button>
       </div>
+      <% } %>
 
       <h2 class="section-heading" style="margin-top: 0;">View Portfolio</h2>
   
@@ -57,12 +63,17 @@
             </a>
           <% }) %>
         <% } else { %>
-          <p class="portfolio-empty-message">No portfolio items yet. Add one using the button above!</p>
+          <% if (isAdmin) { %>
+            <p class="portfolio-empty-message">No portfolio items yet. Add one using the button above!</p>
+          <% } else { %>
+            <p class="portfolio-empty-message">No portfolio items yet. Check back soon!</p>
+          <% } %>
         <% } %>
       </div>
     </div>
   </section>
 
+  <% if (isAdmin) { %>
   <div id="portfolio-modal" class="modal-overlay">
     <div class="modal-content">
       <span class="close-modal">&times;</span>
@@ -86,6 +97,7 @@
       </form>
     </div>
   </div>
+  <% } %>
 
   <!-- ── PACKAGES ── -->
   <section class="packages" id="packages">
@@ -313,6 +325,7 @@
 
 </div>
 
+<% if (isAdmin) { %>
 <script>
     const modal = document.getElementById('portfolio-modal');
     const openBtn = document.getElementById('add-portfolio-btn');
@@ -375,7 +388,9 @@
         alert('Network connection error. Failed to reach the server.');
       }
     });
-  </script>
+</script>
+<% } %>
+
   <!-- ── CONTACT ── -->
   <section class="contact" id="contact">
     <div class="contact-inner">

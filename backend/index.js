@@ -1,7 +1,8 @@
 const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
+const session = require("express-session");
 const routes = require("./routes/routes");
+const dotenv = require("dotenv");
+const cors = require("cors");
 const path = require("path");
 
 dotenv.config();
@@ -28,6 +29,17 @@ app.use(express.json());
 
 // Enable CORS
 app.use(cors());
+
+// Session middleware
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false, // set to true once HTTPS is confirmed working on Render
+        maxAge: 1000 * 60 * 60 * 8 // 8 hours
+    }
+}));
 
 // Serve static files (CSS, JS, Images)
 app.use(express.static("public"));
