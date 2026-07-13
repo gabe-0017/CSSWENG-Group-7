@@ -1,22 +1,14 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.DEV_EMAIL,   // change to ADMIN_EMAIL once passed to our client
-        pass: process.env.DEV_PASSWORD // change to ADMIN_PASSWORD once passed to our client
-    }                                  // !!! ALSO CHANGE IN .env FILE AND render.com ENVIRONMENTS !!!
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // =========================
 // NOTIFY ADMIN OF NEW BOOKING
 // =========================
 async function notifyAdminNewBooking(booking) {
-    await transporter.sendMail({
-        from: `"The Caterer & Co" <${process.env.DEV_EMAIL}>`, // change to ADMIN_EMAIL later...
-        to: process.env.DEV_EMAIL, // change to ADMIN_EMAIL later...
+    await resend.emails.send({
+        from: "The Caterer & Co <onboarding@resend.dev>",
+        to: process.env.DEV_EMAIL, // change to ADMIN_EMAIL before passing to the client (in .env and render.com as well)
         subject: `New Booking Request — ${booking.first_name} ${booking.last_name}`,
         html: `
             <h2>New Booking Request</h2>
@@ -42,8 +34,8 @@ async function notifyAdminNewBooking(booking) {
 // NOTIFY CUSTOMER OF ACCEPTANCE
 // =========================
 async function notifyCustomerAccepted(booking) {
-    await transporter.sendMail({
-        from: `"The Caterer & Co" <${process.env.DEV_EMAIL}>`, // change to ADMIN_EMAIL later...
+    await resend.emails.send({
+        from: "The Caterer & Co <onboarding@resend.dev>",
         to: booking.email,
         subject: `Your Booking has been Confirmed — ${booking.event_date}`,
         html: `
@@ -70,8 +62,8 @@ async function notifyCustomerAccepted(booking) {
 // NOTIFY CUSTOMER OF REJECTION
 // =========================
 async function notifyCustomerRejected(booking, reason) {
-    await transporter.sendMail({
-        from: `"The Caterer & Co" <${process.env.DEV_EMAIL}>`, // change to ADMIN_EMAIL later...
+    await resend.emails.send({
+        from: "The Caterer & Co <onboarding@resend.dev>",
         to: booking.email,
         subject: `Update on Your Booking Request — ${booking.event_date}`,
         html: `
