@@ -3,6 +3,7 @@ const router = express.Router();
 const supabase = require("../supabaseclient");
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
+const { notifyAdminNewBooking, notifyCustomerAccepted, notifyCustomerRejected } = require("../mailer");
 
 // =========================
 // AUTH MIDDLEWARE
@@ -314,6 +315,14 @@ router.post("/book", async (req, res) => {
         console.log("========== BOOKING SAVED ==========");
         console.log(data);
 
+        // Notify admin of new booking
+        try {
+            await notifyAdminNewBooking(data[0]);
+        } catch (mailErr) {
+            console.error("Failed to send admin notification email:", mailErr);
+            // Don't block the booking if email fails
+        }
+
         res.redirect("/");
 
     } catch (err) {
@@ -324,7 +333,7 @@ router.post("/book", async (req, res) => {
 });
 
 // =========================
-// ADMIN FEATURES
+// ADMIN PORTFOLIO FEATURES
 // =========================
 
 // Creates a new portfolio item with optional image uploads
@@ -623,6 +632,100 @@ router.delete("/portfolio/:id", requireAdmin, async (req, res) => {
     console.error('Error deleting portfolio item:', error);
     res.status(500).json({ error: "Failed to delete portfolio item." });
   }
+});
+
+// =========================
+// ADMIN PACKAGE FEATURES
+// =========================
+
+// insert code here... 
+
+// =========================
+// ADMIN BOOKING FEATURES
+// =========================
+
+// 
+router.get("/admin/bookings", requireAdmin, async (req, res) => {
+    try {
+        const { data: bookings, error } = await supabase
+            .from("booking")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        res.render("admin-bookings", { bookings, isAdmin: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Unable to load bookings.");
+    }
+});
+
+// Accepts bookings
+router.post("/admin/bookings/:id/accept", requireAdmin, async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const { data: booking, error: fetchError } = await supabase
+            .from("booking")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+        if (fetchError) throw fetchError;
+
+        const { error: updateError } = await supabase
+            .from("booking")
+            .update({ status: "accepted" })
+            .eq("id", id);
+
+        if (updateError) throw updateError;
+
+        try {
+            await notifyCustomerAccepted(booking);
+        } catch (mailErr) {
+            console.error("Failed to send acceptance email:", mailErr);
+        }
+
+        res.redirect("/admin/bookings");
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Failed to accept booking.");
+    }
+});
+
+// Rejects bookings
+router.post("/admin/bookings/:id/reject", requireAdmin, async (req, res) => {
+    const { id } = req.params;
+    const { reason } = req.body;
+
+    try {
+        const { data: booking, error: fetchError } = await supabase
+            .from("booking")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+        if (fetchError) throw fetchError;
+
+        const { error: updateError } = await supabase
+            .from("booking")
+            .update({ status: "rejected" })
+            .eq("id", id);
+
+        if (updateError) throw updateError;
+
+        try {
+            await notifyCustomerRejected(booking, reason);
+        } catch (mailErr) {
+            console.error("Failed to send rejection email:", mailErr);
+        }
+
+        res.redirect("/admin/bookings");
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Failed to reject booking.");
+    }
 });
 
 module.exports = router;
