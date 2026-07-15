@@ -104,74 +104,82 @@
   <section class="packages" id="packages">
     <div class="packages-inner">
 
-      <!-- Wedding Package -->
-      <div class="package-card">
-        <div class="package-details">
-          <h2 class="package-title">Wedding Package:</h2>
-          <ul class="package-list">
-            <li>Wedding Set-up tables based on the theme & motif</li>
-            <li>Monoblock Chair with Cover</li>
-            <li>Buffet Table Set-up</li>
-            <li>Complete catering equipment and utensils</li>
-            <li>Pork, Chicken, Fish or Vegetable, Pasta & Dessert, Plain rice</li>
-            <li>Purified Water and ice, House Blend Iced Tea</li>
-            <li>Uniformed Waiters and Buffet Attendants</li>
-            <li>Scheduled Food Tasting for 2 pax</li>
-          </ul>
-          <h3 class="venue-title">Venue Styling (Reception)</h3>
-          <ul class="package-list">
-            <li>Wedding Reception Set-up based on the theme & motif</li>
-            <li>Reception's Backdrop and Venue Wedding Design</li>
-            <li>Kneeler, Carpet and Aisle Set-up</li>
-            <li>Welcome Sign Board with Stand</li>
-          </ul>
-        </div>
-        <div class="package-rates">
-          <h3 class="rates-title">Rates:</h3>
-          <ul class="rates-list">
-            <li><span class="rate-pax">100 pax</span> : <span class="rate-price">900 PESOS/PAX</span></li>
-            <li><span class="rate-pax">75 pax</span> : <span class="rate-price">1,100 PESOS/PAX</span></li>
-            <li><span class="rate-pax">50 pax</span> : <span class="rate-price">1,250 PESOS/PAX</span></li>
-          </ul>
-          <p class="rates-note">OOTF may apply outside Bacoor Cavite.</p>
-          <p class="rates-note">"Prices are subject to change without prior notice."</p>
-        </div>
+    <% packages.forEach(pkg => { %>
+
+    <div class="package-card">
+
+      <div class="package-details">
+
+        <h2 class="package-title">
+          <%= pkg.package_title %>
+        </h2>
+
+        <ul class="package-list">
+
+          <% pkg.package_contents.forEach(item => { %>
+            <li><%= item %></li>
+          <% }) %>
+
+        </ul>
+
+        <h3 class="venue-title">
+          Venue Styling
+        </h3>
+
+        <ul class="package-list">
+
+          <% pkg.venue_styling.forEach(item => { %>
+            <li><%= item %></li>
+          <% }) %>
+
+        </ul>
+
       </div>
 
-      <!-- Birthday Package -->
-      <div class="package-card">
-        <div class="package-details">
-          <h2 class="package-title">Birthday Package:</h2>
-          <ul class="package-list">
-            <li>Table Set-up based on the theme & motif</li>
-            <li>Monoblock Chair with Cover</li>
-            <li>Buffet Table Set-up</li>
-            <li>Complete catering equipment and utensils</li>
-            <li>Pork, Chicken, Fish or Vegetable, Pasta & Dessert, Plain rice</li>
-            <li>Purified Water and ice, House Blend Iced Tea</li>
-            <li>Uniformed Waiters and Buffet Attendants</li>
-            <li>Scheduled Food Tasting for 2 pax</li>
-          </ul>
-          <h3 class="venue-title">Venue Styling (Reception)</h3>
-          <ul class="package-list">
-            <li>Basic Balloon Decoration with Themed Backdrop</li>
-            <li>Welcome Sign Board with Stand</li>
-          </ul>
-        </div>
-        <div class="package-rates">
-          <h3 class="rates-title">Rates:</h3>
-          <ul class="rates-list">
-            <li><span class="rate-pax">100 pax</span> : <span class="rate-price">650 PESOS/PAX</span></li>
-            <li><span class="rate-pax">75 pax</span> : <span class="rate-price">750 PESOS/PAX</span></li>
-            <li><span class="rate-pax">50 pax</span> : <span class="rate-price">800 PESOS/PAX</span></li>
-          </ul>
-          <p class="rates-note">"Prices are subject to change without prior notice."</p>
-        </div>
+      <div class="package-rates">
+
+        <h3 class="rates-title">
+          Rates
+        </h3>
+
+        <ul class="rates-list">
+
+          <% pkg.rates.forEach(rate => { %>
+
+            <li>
+
+              <span class="rate-pax">
+                <%= rate.guests %> pax
+              </span>
+
+              :
+
+              <span class="rate-price">
+                ₱<%= rate.price %>/PAX
+              </span>
+
+            </li>
+
+          <% }) %>
+
+        </ul>
+
+        <% if (pkg.note) { %>
+
+          <p class="rates-note">
+            <%= pkg.note %>
+          </p>
+
+        <% } %>
+
       </div>
 
     </div>
-  </section>
 
+    <% }) %>
+
+    </div>
+  </section>
 
    <!-- ── BOOKING ── -->
 <div class="booking-page" id="booking-page">
@@ -307,9 +315,14 @@
           <label>Package (Optional)</label> <!-- Static for now, make dynamic once package manager is implemented -->
 
           <select name="package">
-            <option value="">Choose Package</option>
-            <option value="Wedding Package">Wedding Package</option>
-            <option value="Birthday Package">Birthday Package</option>
+              <option value="">Choose Package</option>
+
+              <% packages.forEach(pkg => { %>
+                  <option value="<%= pkg.package_title %>">
+                      <%= pkg.package_title %>
+                  </option>
+              <% }) %>
+
           </select>
 
         </div>

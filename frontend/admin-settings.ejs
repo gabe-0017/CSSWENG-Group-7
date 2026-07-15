@@ -23,8 +23,8 @@
 
   <!-- ── ADMIN SETTINGS ── -->
   <div class="booking-page">
-    <div class="booking-container" style="max-width: 560px;">
-
+    <div class="booking-container" style="max-width: 950px;">
+      
       <h2>Admin Settings</h2>
       <p class="booking-subtitle">Logged in as <strong><%= adminEmail %></strong></p>
 
@@ -59,15 +59,361 @@
           <label>New Password</label>
           <input type="password" name="password" required />
         </div>
+
         <div class="form-group">
           <label>Confirm New Password</label>
           <input type="password" name="confirm_password" required />
         </div>
-        <button class="book-btn" type="submit">Update Password</button>
+
+        <button class="book-btn" type="submit">
+          Update Password
+        </button>
       </form>
+
+      <hr style="margin:50px 0;">
+
+      <!--  PACKAGE MANAGER -->
+
+      <div class="section-title">
+        Package Manager
+      </div>
+
+      <p class="booking-subtitle" style="text-align:left;">
+        Create, edit and remove packages that customers can book.
+      </p>
+
+      <!-- ADD PACKAGE -->
+
+      <form action="/admin/packages" method="POST">
+
+        <div class="form-group">
+          <label>Package Name</label>
+          <input
+            type="text"
+            name="package_title"
+            placeholder="Wedding Package"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label>Package Contents</label>
+          <small>One item per line</small>
+
+          <textarea
+            name="package_contents"
+            rows="8"
+            placeholder="Wedding Set-up tables 
+Monoblock Chair with Cover 
+Buffet Table Set-up"
+          required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Venue Styling</label>
+          <small>One item per line</small>
+
+          <textarea
+            name="venue_styling"
+            rows="6"
+            placeholder="Reception 
+Backdrop 
+Welcome 
+Sign 
+Board"
+            required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>100 Pax Rate</label>
+          <input type="number" name="rate100" required>
+        </div>
+
+        <div class="form-group">
+          <label>75 Pax Rate</label>
+          <input type="number" name="rate75" required>
+        </div>
+
+        <div class="form-group">
+          <label>50 Pax Rate</label>
+          <input type="number" name="rate50" required>
+        </div>
+
+        <div class="form-group">
+          <label>Note</label>
+          <textarea
+            name="note"
+            rows="3"
+            placeholder="Prices are subject to change without prior notice."></textarea>
+        </div>
+
+        <button class="book-btn" type="submit">
+          Add Package
+        </button>
+
+      </form>
+
+      <hr style="margin:50px 0;">
+
+      <div class="section-title">
+          Existing Packages
+      </div>
+
+      <% if (packages.length === 0) { %>
+
+          <p>No packages have been created yet.</p>
+
+      <% } else { %>
+
+      <div class="package-grid">
+
+      <% packages.forEach(pkg => { %>
+
+      <div class="package-card">
+
+          <h3><%= pkg.package_title %></h3>
+
+          <p>
+              <strong>Package Items:</strong>
+              <%= pkg.package_contents.length %>
+          </p>
+
+          <p>
+              <strong>Venue Styling:</strong>
+              <%= pkg.venue_styling.length %>
+          </p>
+
+          <p>
+              <strong>Rates:</strong>
+              <%= pkg.rates.length %>
+          </p>
+
+          <% if (pkg.note) { %>
+              <p><strong>Note:</strong> <%= pkg.note %></p>
+          <% } %>
+
+          <details style="margin-top:20px;">
+
+              <summary style="cursor:pointer;font-weight:bold;">
+                  Edit Package
+              </summary>
+
+              <form action="/admin/packages/<%= pkg.id %>" method="POST">
+
+                  <div class="form-group">
+
+                      <label>Package Name</label>
+
+                      <input
+                          type="text"
+                          name="package_title"
+                          value="<%= pkg.package_title %>"
+                          required>
+
+                  </div>
+
+                  <div class="form-group">
+
+                      <label>Package Contents</label>
+
+                      <small>One item per line</small>
+
+                      <textarea
+                          name="package_contents"
+                          rows="8"><%= pkg.package_contents.join('\n') %></textarea>
+
+                  </div>
+
+                  <div class="form-group">
+
+                      <label>Venue Styling</label>
+
+                      <small>One item per line</small>
+
+                      <textarea
+                          name="venue_styling"
+                          rows="6"><%= pkg.venue_styling.join('\n') %></textarea>
+
+                  </div>
+
+                  <div class="form-group">
+
+                      <label>100 Pax Rate</label>
+
+                      <input
+                          type="number"
+                          name="rate100"
+                          value="<%= pkg.rates[0]?.price || '' %>">
+
+                  </div>
+
+                  <div class="form-group">
+
+                      <label>75 Pax Rate</label>
+
+                      <input
+                          type="number"
+                          name="rate75"
+                          value="<%= pkg.rates[1]?.price || '' %>">
+
+                  </div>
+
+                  <div class="form-group">
+
+                      <label>50 Pax Rate</label>
+
+                      <input
+                          type="number"
+                          name="rate50"
+                          value="<%= pkg.rates[2]?.price || '' %>">
+
+                  </div>
+
+                  <div class="form-group">
+
+                      <label>Note</label>
+
+                      <textarea
+                          name="note"
+                          rows="3"><%= pkg.note || '' %></textarea>
+
+                  </div>
+
+                  <button class="book-btn" type="submit">
+
+                      Save Changes
+
+                  </button>
+
+              </form>
+
+              <form
+                  action="/admin/packages/<%= pkg.id %>/delete"
+                  method="POST"
+                  style="margin-top:15px;">
+
+                  <button
+                      class="delete-btn"
+                      onclick="return confirm('Delete this package?')">
+
+                      Delete Package
+
+                  </button>
+
+              </form>
+
+          </details>
+
+      </div>
+
+      <% }) %>
+
+      </div>
+
+      <% } %>
+
+      <div id="edit-package-modal" class="modal-overlay">
+
+        <div class="modal-content" style="max-width:800px;">
+
+            <span class="close-modal">&times;</span>
+
+            <h2>Edit Package</h2>
+
+            <form id="edit-package-form" method="POST">
+
+                <div class="form-group">
+
+                    <label>Package Name</label>
+
+                    <input
+                        type="text"
+                        id="edit-package-title"
+                        name="package_title">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Package Contents</label>
+
+                    <textarea
+                        id="edit-package-contents"
+                        name="package_contents"
+                        rows="8"></textarea>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Venue Styling</label>
+
+                    <textarea
+                        id="edit-package-venue"
+                        name="venue_styling"
+                        rows="6"></textarea>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>100 Pax Rate</label>
+
+                    <input
+                        type="number"
+                        id="edit-rate100"
+                        name="rate100">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>75 Pax Rate</label>
+
+                    <input
+                        type="number"
+                        id="edit-rate75"
+                        name="rate75">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>50 Pax Rate</label>
+
+                    <input
+                        type="number"
+                        id="edit-rate50"
+                        name="rate50">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Note</label>
+
+                    <textarea
+                        id="edit-note"
+                        name="note"
+                        rows="3"></textarea>
+
+                </div>
+
+                <button class="book-btn">
+
+                    Save Changes
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
 
     </div>
   </div>
 
 </body>
 </html>
+
+
