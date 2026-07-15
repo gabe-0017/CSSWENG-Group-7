@@ -1137,3 +1137,24 @@ a.portfolio-item {
   display: flex;
   gap: 12px;
 }
+
+.package-card {
+    display: block;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.package-card details {
+    margin-top: 20px;
+    display: block;
+}
+
+.package-card form {
+    margin-top: 20px;
+}
+
+.package-card textarea,
+.package-card input {
+    width: 100%;
+    box-sizing: border-box;
+}
