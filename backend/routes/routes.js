@@ -21,29 +21,56 @@ function requireAdmin(req, res, next) {
 
 router.get("/", async (req, res) => {
     try {
+
+        // Portfolio items and their associated images are fetched separately to avoid complex joins and to allow for more flexible image handling. The images are then attached to their respective portfolio items in-memory before rendering the page.
         const { data: portfolioItems, error: portfolioError } = await supabase
-      .from('portfolio')
-      .select('*')
-      .order('created_at', { ascending: false });
+            .from("portfolio")
+            .select("*")
+            .order("created_at", { ascending: false });
 
-    if (portfolioError) throw portfolioError;
+        if (portfolioError) throw portfolioError;
 
-    const { data: allImages, error: imagesError } = await supabase
-      .from('portfolio_images')
-      .select('portfolio_id, image_url');
+        const { data: allImages, error: imagesError } = await supabase
+            .from("portfolio_images")
+            .select("portfolio_id, image_url");
 
-    if (imagesError) throw imagesError;
+        if (imagesError) throw imagesError;
 
-    // Attach images to each portfolio item without relying on a DB-level FK join
-    const itemsWithImages = portfolioItems.map(item => ({
-      ...item,
-      portfolio_images: (allImages || []).filter(img => img.portfolio_id === item.id)
-    }));
+        // Attach images to each portfolio item without relying on a DB-level FK join
+        const itemsWithImages = portfolioItems.map(item => ({
+            ...item,
+            portfolio_images: (allImages || []).filter(img => img.portfolio_id === item.id)
+        }));
 
-    res.render("index", { portfolioItems: itemsWithImages, isAdmin: req.session.isAdmin || false });
+        // Packages
+        const { data: packages, error: packageError } = await supabase
+            .from("packages")
+            .select("*")
+            .order("id");
+            console.log(JSON.stringify(packages, null, 2));
+
+        if (packageError) throw packageError;
+
+        console.log("PACKAGES:");
+        packages.forEach(pkg => {
+            console.log(pkg.package_title);
+            console.log("package_contents =", pkg.package_contents);
+            console.log("type =", typeof pkg.package_contents);
+            console.log("isArray =", Array.isArray(pkg.package_contents));
+        });
+
+        res.render("index", {
+            portfolioItems: itemsWithImages,
+            packages,
+            isAdmin: req.session.isAdmin || false
+        });
+
     } catch (error) {
-        console.error("Error rendering page:", error);
+
+        console.error(error);
+
         res.status(500).send("Unable to load page.");
+
     }
 });
 
@@ -95,12 +122,37 @@ router.get("/admin/logout", (req, res) => {
 // =========================
 // ADMIN SETTINGS PAGE
 // =========================
-router.get("/admin/settings", requireAdmin, (req, res) => {
-    res.render("admin-settings", { 
-        success: null, 
-        error: null,
-        adminEmail: req.session.adminEmail
-    });
+router.get("/admin/settings", requireAdmin, async (req, res) => {
+
+    try {
+
+        const { data: packages, error } = await supabase
+            .from("packages")
+            .select("*")
+            .order("id");
+
+        if (error) throw error;
+
+        res.render("admin-settings", {
+            success: null,
+            error: null,
+            adminEmail: req.session.adminEmail,
+            packages
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.render("admin-settings", {
+            success: null,
+            error: "Unable to load packages.",
+            adminEmail: req.session.adminEmail,
+            packages: []
+        });
+
+    }
+
 });
 
 // =========================
@@ -155,11 +207,7 @@ router.post("/admin/settings/password", requireAdmin, async (req, res) => {
 
         if (error) throw error;
 
-        res.render("admin-settings", { 
-            success: "Password updated successfully!", 
-            error: null,
-            adminEmail: req.session.adminEmail
-        });
+        res.redirect("/admin/settings");
     } catch (err) {
         console.error(err);
         res.render("admin-settings", { 
@@ -636,10 +684,154 @@ router.delete("/portfolio/:id", requireAdmin, async (req, res) => {
 });
 
 // =========================
-// ADMIN PACKAGE FEATURES
+// VIEW ALL PACKAGES
 // =========================
 
-// insert code here... 
+router.get("/admin/packages", requireAdmin, async (req, res) => {
+
+    const { data: packages, error } = await supabase
+        .from("packages")
+        .select("*")
+        .order("id");
+
+    if (error) return res.status(500).send(error.message);
+
+    res.json(packages);
+
+});
+
+
+// =========================
+// ADD PACKAGE
+// =========================
+
+router.post("/admin/packages", requireAdmin, async (req, res) => {
+
+    const {
+        package_title,
+        package_contents,
+        venue_styling,
+        note,
+        rate100,
+        rate75,
+        rate50
+    } = req.body;
+
+    const { error } = await supabase
+        .from("packages")
+        .insert([{
+            package_title,
+
+            package_contents: package_contents
+                .split("\n")
+                .map(x => x.trim())
+                .filter(Boolean),
+
+            venue_styling: venue_styling
+                .split("\n")
+                .map(x => x.trim())
+                .filter(Boolean),
+
+            rates: [
+                { guests: 100, price: Number(rate100) },
+                { guests: 75, price: Number(rate75) },
+                { guests: 50, price: Number(rate50) }
+            ],
+
+            note,
+
+            active: true
+        }]);
+
+    if (error)
+        return res.status(500).send(error.message);
+
+    res.redirect("/admin/settings");
+});
+
+
+// =========================
+// UPDATE PACKAGE
+// =========================
+
+router.post("/admin/packages/:id", requireAdmin, async (req, res) => {
+
+    const { id } = req.params;
+
+    const {
+        package_title,
+        package_contents,
+        venue_styling,
+        note,
+        rate100,
+        rate75,
+        rate50
+    } = req.body;
+
+    const { error } = await supabase
+        .from("packages")
+        .update({
+
+            package_title,
+
+            package_contents: package_contents
+                .split("\n")
+                .map(x => x.trim())
+                .filter(Boolean),
+
+            venue_styling: venue_styling
+                .split("\n")
+                .map(x => x.trim())
+                .filter(Boolean),
+
+            rates: [
+                {
+                    guests: 100,
+                    price: Number(rate100)
+                },
+                {
+                    guests: 75,
+                    price: Number(rate75)
+                },
+                {
+                    guests: 50,
+                    price: Number(rate50)
+                }
+            ],
+
+            note
+
+        })
+        .eq("id", id);
+
+    if (error) {
+        console.error(error);
+        return res.status(500).send(error.message);
+    }
+
+    res.redirect("/admin/settings");
+
+});
+
+// =========================
+// DELETE PACKAGE
+// =========================
+
+router.post("/admin/packages/:id/delete", requireAdmin, async (req, res) => {
+
+    const { id } = req.params;
+
+    const { error } = await supabase
+        .from("packages")
+        .delete()
+        .eq("id", id);
+
+    if (error)
+        return res.status(500).send(error.message);
+
+    res.redirect("/admin/settings");
+
+});
 
 // =========================
 // ADMIN BOOKING FEATURES
